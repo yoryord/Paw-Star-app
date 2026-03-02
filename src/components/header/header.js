@@ -1,5 +1,6 @@
 import './header.css';
 import { isLoggedIn, clearSession, getDisplayName } from '../../lib/auth.js';
+import { supabaseClient } from '../../lib/supabase.js';
 
 /** Dispatch a SPA navigation event (avoids circular dependency with router). */
 const navigate = (path) => {
@@ -54,8 +55,8 @@ export const renderHeader = (container) => {
   // Handle logout button
   const logoutBtn = container.querySelector('#header-logout-btn');
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-      clearSession();
+    logoutBtn.addEventListener('click', async () => {
+      await clearSession();
       navigate('/');
     });
   }

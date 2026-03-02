@@ -1,6 +1,6 @@
 import './login.css';
 import loginTemplate from './login.html?raw';
-import { setSession } from '../../lib/auth.js';
+import { supabaseClient } from '../../lib/supabase.js';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -75,15 +75,9 @@ export const loginPage = {
       setLoading(submitBtn, true);
 
       try {
-        // TODO: replace with real Supabase auth call:
-        // import { supabase } from '../../lib/supabase.js';
-        // const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        // if (error) throw error;
-        // setSession(data.session);
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
 
-        // Placeholder success simulation — stores a stub session
-        await new Promise((r) => setTimeout(r, 800));
-        setSession({ user: { email, user_metadata: {} } });
         window.dispatchEvent(new CustomEvent('paw:navigate', { detail: { path: '/my-space' } }));
       } catch (err) {
         showAlert(alertEl, err?.message ?? 'Login failed. Please check your credentials.', 'error');

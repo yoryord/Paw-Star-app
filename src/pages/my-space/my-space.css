@@ -6,7 +6,6 @@
   min-height: calc(100vh - 4rem);
 }
 
-/* ─── Hero banner ───────────────────────────────────────────── */
 .my-space-hero {
   border-radius: 1.25rem;
   background: linear-gradient(135deg,
@@ -41,33 +40,198 @@
   font-weight: 500;
 }
 
-/* ─── Cards ─────────────────────────────────────────────────── */
-.my-space-card {
-  background: rgba(255, 255, 255, 0.95);
+.my-space-section {
+  background: rgba(255, 255, 255, 0.82);
   border: 1px solid rgba(var(--bs-warning-rgb), 0.38);
+  border-radius: 1.2rem;
+  box-shadow: 0 0.5rem 1.2rem rgba(var(--bs-dark-rgb), 0.05);
+  padding: 1.1rem 1.1rem 1.25rem;
+}
+
+.my-space-section-title {
+  font-size: clamp(1.2rem, 1rem + 0.8vw, 1.65rem);
+  font-weight: 800;
+  color: var(--bs-emphasis-color);
+}
+
+.my-space-section-note {
+  font-size: 0.82rem;
+  color: var(--bs-secondary-color);
+  font-weight: 600;
+}
+
+.my-space-empty {
+  border: 1px dashed rgba(var(--bs-warning-rgb), 0.55);
   border-radius: 1rem;
-  box-shadow: 0 0.5rem 1rem rgba(var(--bs-dark-rgb), 0.06);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  background: rgba(var(--bs-warning-rgb), 0.06);
+  color: var(--bs-secondary-color);
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
-.my-space-card:hover {
+.pet-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border: 1px solid rgba(var(--bs-warning-rgb), 0.25);
+  border-radius: 1rem;
+  box-shadow: 0 0.35rem 0.9rem rgba(var(--bs-dark-rgb), 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  padding: 1rem 0.85rem;
+  text-align: center;
+  height: 100%;
+}
+
+.pet-card:hover,
+.pet-card:focus-visible {
   transform: translateY(-4px);
-  box-shadow: 0 0.75rem 1.5rem rgba(var(--bs-warning-rgb), 0.3);
+  box-shadow: 0 0.85rem 1.5rem rgba(var(--bs-warning-rgb), 0.25);
+  border-color: rgba(var(--bs-warning-rgb), 0.65);
+  text-decoration: none;
 }
 
-.my-space-card-icon {
-  font-size: 2.5rem;
+.pet-avatar-ring {
+  width: 5.6rem;
+  height: 5.6rem;
+  margin: 0 auto 0.75rem;
+  border-radius: 50%;
+  background: linear-gradient(140deg,
+    rgba(var(--bs-warning-rgb), 1),
+    rgba(var(--bs-danger-rgb), 0.85),
+    rgba(var(--bs-warning-rgb), 0.75));
+  display: grid;
+  place-items: center;
+  padding: 3px;
+  transition: transform 0.3s ease;
+}
+
+.pet-card:hover .pet-avatar-ring,
+.pet-card:focus-visible .pet-avatar-ring {
+  transform: rotate(-6deg) scale(1.04);
+}
+
+.pet-avatar-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(var(--bs-warning-rgb), 0.13);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pet-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pet-avatar-fallback {
+  font-size: 2rem;
   line-height: 1;
 }
 
-/* ─── Badge ─────────────────────────────────────────────────── */
-.my-space-badge {
-  background-color: rgba(var(--bs-warning-rgb), 0.18);
-  color: var(--bs-warning-text-emphasis);
-  border: 1px solid rgba(var(--bs-warning-rgb), 0.45);
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.3rem 0.75rem;
+.pet-name {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.1rem;
+}
+
+.pet-meta {
+  font-size: 0.8rem;
+  color: var(--bs-secondary-color);
+  text-transform: capitalize;
+}
+
+.story-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border: 1px solid rgba(var(--bs-warning-rgb), 0.28);
+  border-radius: 1rem;
+  box-shadow: 0 0.45rem 1rem rgba(var(--bs-dark-rgb), 0.05);
+  overflow: hidden;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.story-card:hover,
+.story-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 0.9rem 1.6rem rgba(var(--bs-warning-rgb), 0.2);
+  border-color: rgba(var(--bs-warning-rgb), 0.65);
+  text-decoration: none;
+}
+
+.story-card-image {
+  aspect-ratio: 16 / 7;
+  background: linear-gradient(135deg,
+    rgba(var(--bs-warning-rgb), 0.2),
+    rgba(var(--bs-danger-rgb), 0.1));
+  border-bottom: 1px solid rgba(var(--bs-warning-rgb), 0.2);
+  position: relative;
+}
+
+.story-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.story-card-content {
+  padding: 1rem 1rem 1.05rem;
+}
+
+.story-title {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--bs-emphasis-color);
+  margin-bottom: 0.55rem;
+}
+
+.story-excerpt {
+  font-size: 0.92rem;
+  color: var(--bs-secondary-color);
+  margin-bottom: 0;
+}
+
+.story-status-badge {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
   border-radius: 999px;
-  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.3rem 0.58rem;
+  border: 1px solid transparent;
+  text-transform: lowercase;
+}
+
+.story-status-badge.published {
+  background: rgba(var(--bs-success-rgb), 0.18);
+  color: var(--bs-success-text-emphasis);
+  border-color: rgba(var(--bs-success-rgb), 0.34);
+}
+
+.story-status-badge.draft {
+  background: rgba(var(--bs-warning-rgb), 0.2);
+  color: var(--bs-warning-text-emphasis);
+  border-color: rgba(var(--bs-warning-rgb), 0.44);
+}
+
+@media (max-width: 575.98px) {
+  .my-space-section {
+    padding: 0.9rem 0.85rem 1rem;
+  }
+
+  .pet-avatar-ring {
+    width: 5rem;
+    height: 5rem;
+  }
 }

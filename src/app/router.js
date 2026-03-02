@@ -5,14 +5,20 @@ import { storiesPage } from '../pages/stories/stories.js';
 import { loginPage } from '../pages/login/login.js';
 import { registerPage } from '../pages/register/register.js';
 import { mySpacePage } from '../pages/my-space/my-space.js';
+import { notFoundPage } from '../pages/not-found/not-found.js';
+import { isLoggedIn } from '../lib/auth.js';
 
 const routes = {
   '/': indexPage,
   '/stories': storiesPage,
   '/login': loginPage,
   '/register': registerPage,
-  '/my-space': mySpacePage
+  '/my-space': mySpacePage,
+  '/404': notFoundPage,
 };
+
+/** Routes that require an authenticated session. */
+const protectedRoutes = new Set(['/my-space']);
 
 const normalizePath = (path) => {
   if (!path) {
@@ -28,7 +34,7 @@ const normalizePath = (path) => {
 
 const getRoute = (path) => {
   const normalizedPath = normalizePath(path);
-  return routes[normalizedPath] ?? indexPage;
+  return routes[normalizedPath] ?? notFoundPage;
 };
 
 const renderAppShell = () => {
@@ -53,7 +59,20 @@ const renderAppShell = () => {
 };
 
 const renderRoute = (path) => {
-  const currentRoute = getRoute(path);
+  const normalizedPath = normalizePath(path);
+
+  // Auth guard: redirect unauthenticated users away from protected routes
+  if (protectedRoutes.has(normalizedPath) && !isLoggedIn()) {
+    window.history.replaceState({}, '', '/404');
+    const pageSlot = document.getElementById('page-slot') ?? renderAppShell();
+    if (pageSlot) {
+      notFoundPage.render(pageSlot);
+      document.title = notFoundPage.title;
+    }
+    return;
+  }
+
+  const currentRoute = getRoute(normalizedPath);
   const pageSlot = document.getElementById('page-slot') ?? renderAppShell();
 
   if (!pageSlot) {

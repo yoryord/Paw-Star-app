@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap');
+
+.not-found-page {
+  font-family: 'Manrope', var(--bs-font-sans-serif);
+  background-color: #fffcf7;
+  min-height: calc(100vh - 8rem);
+}
+
+.not-found-card {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(var(--bs-warning-rgb), 0.45);
+  border-radius: 1.5rem;
+  box-shadow: 0 0.75rem 2rem rgba(168, 99, 41, 0.13);
+  max-width: 480px;
+  width: 100%;
+  backdrop-filter: blur(6px);
+}
+
+.not-found-paw {
+  font-size: 3.5rem;
+  line-height: 1;
+  animation: paw-bounce 1.8s ease-in-out infinite;
+}
+
+@keyframes paw-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+.not-found-code {
+  font-size: clamp(4rem, 10vw, 6.5rem);
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg,
+    rgba(var(--bs-warning-rgb), 1),
+    rgba(var(--bs-danger-rgb), 0.75));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.not-found-title {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 800;
+  color: var(--bs-emphasis-color);
+}
+
+.not-found-message {
+  color: var(--bs-secondary-color);
+  font-size: 0.97rem;
+  line-height: 1.65;
+  font-weight: 500;
+}
+
+.not-found-message strong {
+  color: var(--bs-warning-text-emphasis);
+  font-weight: 700;
+}
+
+.btn-warning {
+  background-color: var(--bs-warning);
+  border-color: var(--bs-warning);
+  color: var(--bs-dark);
+  border-radius: 2rem;
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.btn-warning:hover,
+.btn-warning:focus {
+  filter: brightness(0.93);
+  transform: translateY(-1px);
+}

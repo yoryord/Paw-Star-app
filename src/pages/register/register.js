@@ -1,6 +1,6 @@
 import './register.css';
 import registerTemplate from './register.html?raw';
-import { setSession } from '../../lib/auth.js';
+import { supabaseClient } from '../../lib/supabase.js';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -142,23 +142,13 @@ export const registerPage = {
       setLoading(submitBtn, true);
 
       try {
-        // TODO: replace with real Supabase auth call:
-        // import { supabase } from '../../lib/supabase.js';
-        // const { data, error } = await supabase.auth.signUp({
-        //   email, password,
-        //   options: { data: { first_name: firstName, last_name: lastName } }
-        // });
-        // if (error) throw error;
-        // setSession(data.session);
-
-        // Placeholder success simulation — stores a stub session and redirects
-        await new Promise((r) => setTimeout(r, 900));
-        setSession({
-          user: {
-            email,
-            user_metadata: { first_name: firstName, last_name: lastName },
-          },
+        const { error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: { data: { first_name: firstName, last_name: lastName } },
         });
+        if (error) throw error;
+
         window.dispatchEvent(new CustomEvent('paw:navigate', { detail: { path: '/my-space' } }));
       } catch (err) {
         showAlert(alertEl, err?.message ?? 'Registration failed. Please try again.', 'error');

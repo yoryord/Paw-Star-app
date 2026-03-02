@@ -1,45 +1,64 @@
+import { supabaseClient } from './supabase.js';
+
 /**
- * Lightweight auth-state helpers.
- * The session object shape mirrors what Supabase returns:
- *   { user: { id, email, user_metadata: { first_name, last_name } } }
- *
- * TODO: replace the localStorage stub with real Supabase session handling once
- *       the Supabase client is initialised (src/lib/supabase.js).
+ * Supabase-backed auth helpers.
+ * `_session` is an in-memory cache kept fresh by onAuthStateChange.
+ * Call `initAuth()` once at app startup before rendering any route.
  */
 
-const SESSION_KEY = 'paw_star_session';
+let _session = null;
+let _profileName = null;
 
-/** Returns the stored session object, or null when logged out. */
-export const getSession = () => {
-  try {
-    const raw = localStorage.getItem(SESSION_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
+/** Fetch and cache the display name from public.users_profiles. */
+const loadProfileName = async (userId) => {
+  if (!userId) { _profileName = null; return; }
+  const { data } = await supabaseClient
+    .from('users_profiles')
+    .select('name')
+    .eq('id', userId)
+    .maybeSingle();
+  _profileName = data?.name ?? null;
 };
 
-/** Persist a session after a successful login / sign-up. */
-export const setSession = (sessionData) => {
-  localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+/**
+ * Bootstrap: load the current Supabase session and subscribe to changes.
+ * Must be awaited before the router renders the first page.
+ */
+export const initAuth = async () => {
+  const { data } = await supabaseClient.auth.getSession();
+  _session = data.session ?? null;
+  await loadProfileName(_session?.user?.id);
+
+  supabaseClient.auth.onAuthStateChange((_event, session) => {
+    _session = session ?? null;
+    loadProfileName(_session?.user?.id);
+  });
 };
 
-/** Remove the session (logout). */
-export const clearSession = () => {
-  localStorage.removeItem(SESSION_KEY);
+/** Returns the current Supabase session object, or null when logged out. */
+export const getSession = () => _session;
+
+/**
+ * @deprecated – session is now managed by Supabase automatically.
+ * Kept for backward compatibility; no-op.
+ */
+export const setSession = () => {};
+
+/** Sign the current user out via Supabase and clear in-memory session. */
+export const clearSession = async () => {
+  await supabaseClient.auth.signOut();
+  _session = null;
 };
 
 /** Convenience boolean check. */
-export const isLoggedIn = () => getSession() !== null;
+export const isLoggedIn = () => _session !== null;
 
 /**
  * Returns a display name for the current user.
- * Falls back gracefully when metadata is missing.
+ * Prefers the name from public.users_profiles, falls back to email.
  */
 export const getDisplayName = () => {
-  const session = getSession();
-  if (!session) return '';
-  const meta = session.user?.user_metadata ?? {};
-  if (meta.first_name) return meta.first_name;
-  return session.user?.email ?? '';
+  if (!_session) return '';
+  if (_profileName) return _profileName;
+  return _session.user?.email ?? '';
 };
