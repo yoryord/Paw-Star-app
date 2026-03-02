@@ -1,0 +1,364 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+/* ─── Page wrapper ─────────────────────────────────────────── */
+.new-pet-page {
+  font-family: 'Manrope', var(--bs-font-sans-serif);
+  background-color: #fffcf7;
+  min-height: calc(100vh - 4rem);
+}
+
+/* ─── Back link ─────────────────────────────────────────────── */
+.new-pet-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--bs-warning-text-emphasis);
+  text-decoration: none;
+  transition: opacity 0.2s ease, gap 0.2s ease;
+  opacity: 0.8;
+}
+
+.new-pet-back-link:hover,
+.new-pet-back-link:focus {
+  opacity: 1;
+  gap: 0.6rem;
+  color: var(--bs-warning-text-emphasis);
+  text-decoration: none;
+}
+
+/* ─── Hero banner ───────────────────────────────────────────── */
+.new-pet-hero {
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg,
+    rgba(var(--bs-warning-rgb), 0.22),
+    rgba(var(--bs-danger-rgb), 0.07));
+  border: 1px solid rgba(var(--bs-warning-rgb), 0.45);
+  box-shadow: 0 0.5rem 1.5rem rgba(168, 99, 41, 0.1);
+}
+
+.new-pet-hero-icon {
+  font-size: 2.6rem;
+  width: 3.75rem;
+  height: 3.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  border: 2px solid rgba(var(--bs-warning-rgb), 0.45);
+  flex-shrink: 0;
+}
+
+.new-pet-title {
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-weight: 800;
+  color: var(--bs-emphasis-color);
+}
+
+.new-pet-subtitle {
+  font-size: 0.9rem;
+  color: var(--bs-secondary-color);
+  font-weight: 500;
+}
+
+/* ─── Alert ─────────────────────────────────────────────────── */
+.new-pet-alert {
+  border-radius: 0.75rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1.5px solid transparent;
+  margin-bottom: 1.25rem;
+}
+
+.new-pet-alert.alert-danger {
+  background-color: rgba(var(--bs-danger-rgb), 0.1);
+  border-color: rgba(var(--bs-danger-rgb), 0.35);
+  color: var(--bs-danger-text-emphasis);
+}
+
+/* ─── Form cards ────────────────────────────────────────────── */
+.new-pet-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(var(--bs-warning-rgb), 0.38);
+  border-radius: 1.2rem;
+  box-shadow: 0 0.4rem 1.1rem rgba(var(--bs-dark-rgb), 0.05);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.new-pet-card:focus-within {
+  box-shadow: 0 0.6rem 1.6rem rgba(var(--bs-warning-rgb), 0.18);
+}
+
+.new-pet-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.9rem 1.25rem;
+  background: linear-gradient(90deg,
+    rgba(var(--bs-warning-rgb), 0.12),
+    rgba(var(--bs-warning-rgb), 0.04));
+  border-bottom: 1px solid rgba(var(--bs-warning-rgb), 0.25);
+}
+
+.new-pet-section-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.new-pet-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--bs-emphasis-color);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.new-pet-optional-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--bs-secondary-color);
+  background: rgba(var(--bs-secondary-rgb), 0.1);
+  border-radius: 0.35rem;
+  padding: 0.1rem 0.45rem;
+}
+
+.new-pet-card-body {
+  padding: 1.25rem;
+}
+
+/* ─── Labels ────────────────────────────────────────────────── */
+.new-pet-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--bs-emphasis-color);
+  margin-bottom: 0.35rem;
+}
+
+/* ─── Inputs ────────────────────────────────────────────────── */
+.new-pet-input {
+  border: 1.5px solid rgba(var(--bs-warning-rgb), 0.4);
+  border-radius: 0.65rem;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background-color: #fffdf8;
+  color: var(--bs-emphasis-color);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.new-pet-input:focus {
+  border-color: rgba(var(--bs-warning-rgb), 0.85);
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-warning-rgb), 0.22);
+  background-color: #fff;
+  outline: none;
+}
+
+.new-pet-input::placeholder {
+  color: var(--bs-secondary-color);
+  opacity: 0.7;
+}
+
+.new-pet-input.is-invalid {
+  border-color: var(--bs-danger);
+  background-image: none;
+}
+
+.new-pet-hint {
+  font-size: 0.78rem;
+  color: var(--bs-secondary-color);
+  margin-top: 0.3rem;
+}
+
+/* ─── Photo upload ──────────────────────────────────────────── */
+.new-pet-photo-area {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.new-pet-photo-preview {
+  width: 6.5rem;
+  height: 6.5rem;
+  border-radius: 50%;
+  background: linear-gradient(140deg,
+    rgba(var(--bs-warning-rgb), 1),
+    rgba(var(--bs-danger-rgb), 0.75),
+    rgba(var(--bs-warning-rgb), 0.7));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 3px;
+  position: relative;
+}
+
+.new-pet-photo-preview::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: rgba(var(--bs-warning-rgb), 0.12);
+  z-index: 0;
+}
+
+.new-pet-photo-placeholder {
+  font-size: 2.4rem;
+  line-height: 1;
+  z-index: 1;
+  position: relative;
+}
+
+.new-pet-photo-img {
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  border-radius: 50%;
+  object-fit: cover;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  z-index: 1;
+  background: #fff;
+}
+
+.new-pet-photo-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.new-pet-file-input {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  position: absolute;
+}
+
+.new-pet-upload-btn {
+  background-color: rgba(var(--bs-warning-rgb), 0.15);
+  border: 1.5px solid rgba(var(--bs-warning-rgb), 0.6);
+  color: var(--bs-warning-text-emphasis);
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-family: inherit;
+  padding: 0.45rem 0.9rem;
+  border-radius: 0.6rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.new-pet-upload-btn:hover,
+.new-pet-upload-btn:focus {
+  background-color: rgba(var(--bs-warning-rgb), 0.28);
+  border-color: rgba(var(--bs-warning-rgb), 0.9);
+  transform: translateY(-1px);
+  color: var(--bs-warning-text-emphasis);
+}
+
+.new-pet-clear-btn {
+  background: transparent;
+  border: 1.5px solid rgba(var(--bs-danger-rgb), 0.45);
+  color: var(--bs-danger-text-emphasis);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 0.3rem 0.75rem;
+  border-radius: 0.55rem;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.new-pet-clear-btn:hover,
+.new-pet-clear-btn:focus {
+  background-color: rgba(var(--bs-danger-rgb), 0.1);
+  border-color: rgba(var(--bs-danger-rgb), 0.7);
+  color: var(--bs-danger-text-emphasis);
+}
+
+.new-pet-photo-hint {
+  font-size: 0.78rem;
+  color: var(--bs-secondary-color);
+  font-weight: 500;
+}
+
+.new-pet-storage-note {
+  font-size: 0.78rem;
+  color: var(--bs-secondary-color);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  line-height: 1.5;
+}
+
+/* ─── Action buttons ────────────────────────────────────────── */
+.new-pet-submit-btn {
+  background-color: var(--bs-warning);
+  border-color: var(--bs-warning);
+  color: var(--bs-dark);
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: inherit;
+  padding: 0.65rem 1.75rem;
+  border-radius: 0.65rem;
+  letter-spacing: 0.01em;
+  transition: filter 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.new-pet-submit-btn:hover,
+.new-pet-submit-btn:focus {
+  background-color: var(--bs-warning);
+  border-color: var(--bs-warning);
+  color: var(--bs-dark);
+  filter: brightness(0.93);
+  box-shadow: 0 0.25rem 0.75rem rgba(var(--bs-warning-rgb), 0.45);
+  transform: translateY(-1px);
+}
+
+.new-pet-submit-btn:active {
+  transform: translateY(0);
+  filter: brightness(0.88);
+}
+
+.new-pet-submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.new-pet-cancel-btn {
+  color: var(--bs-secondary-color);
+  border: 1.5px solid rgba(var(--bs-secondary-rgb), 0.35);
+  background: transparent;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.65rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.new-pet-cancel-btn:hover,
+.new-pet-cancel-btn:focus {
+  background-color: rgba(var(--bs-secondary-rgb), 0.08);
+  border-color: rgba(var(--bs-secondary-rgb), 0.55);
+  color: var(--bs-emphasis-color);
+  text-decoration: none;
+}

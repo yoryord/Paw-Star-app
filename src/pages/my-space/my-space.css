@@ -76,6 +76,30 @@
   font-weight: 600;
 }
 
+.my-space-add-btn {
+  background-color: rgba(var(--bs-warning-rgb), 0.15);
+  border: 1.5px solid rgba(var(--bs-warning-rgb), 0.55);
+  color: var(--bs-warning-text-emphasis);
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: inherit;
+  border-radius: 0.55rem;
+  padding: 0.3rem 0.75rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.my-space-add-btn:hover,
+.my-space-add-btn:focus {
+  background-color: rgba(var(--bs-warning-rgb), 0.28);
+  border-color: rgba(var(--bs-warning-rgb), 0.9);
+  color: var(--bs-warning-text-emphasis);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
 .my-space-empty {
   border: 1px dashed rgba(var(--bs-warning-rgb), 0.55);
   border-radius: 1rem;

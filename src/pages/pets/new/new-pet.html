@@ -1,0 +1,248 @@
+<section class="new-pet-page py-5 py-lg-6">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+
+        <!-- Page header -->
+        <div class="new-pet-header mb-4">
+          <a href="/my-space" data-link class="new-pet-back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            </svg>
+            Back to My Space
+          </a>
+          <div class="new-pet-hero p-4 p-md-5 mt-3">
+            <div class="d-flex align-items-center gap-3">
+              <div class="new-pet-hero-icon" aria-hidden="true">🐾</div>
+              <div>
+                <h1 class="new-pet-title mb-1">Register a Pet</h1>
+                <p class="new-pet-subtitle mb-0">Add your cat or dog to Paw Star and let them shine!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alert -->
+        <div id="new-pet-alert" class="new-pet-alert d-none" role="alert"></div>
+
+        <!-- Form card -->
+        <form id="new-pet-form" novalidate>
+
+          <!-- ── Section: Basic Info ───────────────────────────── -->
+          <div class="new-pet-card mb-4">
+            <div class="new-pet-card-header">
+              <span class="new-pet-section-icon" aria-hidden="true">✏️</span>
+              <h2 class="new-pet-section-title">Basic Information</h2>
+            </div>
+            <div class="new-pet-card-body">
+
+              <!-- Name -->
+              <div class="mb-3">
+                <label for="pet-name" class="new-pet-label">
+                  Pet Name <span class="text-danger" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="pet-name"
+                  name="name"
+                  class="form-control new-pet-input"
+                  placeholder="e.g. Whiskers, Buddy…"
+                  maxlength="100"
+                  required
+                  autocomplete="off"
+                />
+                <div class="invalid-feedback">Please enter your pet's name (max 100 characters).</div>
+              </div>
+
+              <!-- Species -->
+              <div class="mb-3">
+                <label for="pet-species" class="new-pet-label">
+                  Species <span class="text-danger" aria-hidden="true">*</span>
+                </label>
+                <select id="pet-species" name="species" class="form-select new-pet-input" required>
+                  <option value="" disabled selected>Select species…</option>
+                  <option value="cat">🐱 Cat</option>
+                  <option value="dog">🐶 Dog</option>
+                </select>
+                <div class="invalid-feedback">Please select a species.</div>
+              </div>
+
+              <!-- Breed -->
+              <div class="mb-0">
+                <label for="pet-breed" class="new-pet-label">
+                  Breed <span class="text-danger" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="pet-breed"
+                  name="breed"
+                  class="form-control new-pet-input"
+                  placeholder="e.g. Persian, Labrador Retriever…"
+                  maxlength="100"
+                  required
+                  autocomplete="off"
+                />
+                <div class="form-text new-pet-hint">Breed selection from a list will be available in a future update.</div>
+                <div class="invalid-feedback">Please enter your pet's breed.</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ── Section: Pet Details ──────────────────────────── -->
+          <div class="new-pet-card mb-4">
+            <div class="new-pet-card-header">
+              <span class="new-pet-section-icon" aria-hidden="true">📋</span>
+              <h2 class="new-pet-section-title">Pet Details <span class="new-pet-optional-badge">optional</span></h2>
+            </div>
+            <div class="new-pet-card-body">
+
+              <!-- Birthdate -->
+              <div class="mb-3">
+                <label for="pet-birthdate" class="new-pet-label">Date of Birth</label>
+                <input
+                  type="date"
+                  id="pet-birthdate"
+                  name="birthdate"
+                  class="form-control new-pet-input"
+                />
+                <div class="invalid-feedback">Birthdate cannot be in the future.</div>
+              </div>
+
+              <!-- Birth place -->
+              <div class="mb-0">
+                <label for="pet-birth-place" class="new-pet-label">Place of Birth</label>
+                <input
+                  type="text"
+                  id="pet-birth-place"
+                  name="birth_place"
+                  class="form-control new-pet-input"
+                  placeholder="e.g. London, UK"
+                  maxlength="150"
+                  autocomplete="off"
+                />
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ── Section: Location ────────────────────────────── -->
+          <div class="new-pet-card mb-4">
+            <div class="new-pet-card-header">
+              <span class="new-pet-section-icon" aria-hidden="true">📍</span>
+              <h2 class="new-pet-section-title">Current Location <span class="new-pet-optional-badge">optional</span></h2>
+            </div>
+            <div class="new-pet-card-body">
+
+              <div class="row g-3">
+                <!-- City -->
+                <div class="col-12 col-sm-6">
+                  <label for="pet-city" class="new-pet-label">City</label>
+                  <input
+                    type="text"
+                    id="pet-city"
+                    name="current_location_city"
+                    class="form-control new-pet-input"
+                    placeholder="e.g. Paris"
+                    maxlength="100"
+                    autocomplete="off"
+                  />
+                </div>
+
+                <!-- Country -->
+                <div class="col-12 col-sm-6">
+                  <label for="pet-country" class="new-pet-label">Country</label>
+                  <input
+                    type="text"
+                    id="pet-country"
+                    name="current_location_country"
+                    class="form-control new-pet-input"
+                    placeholder="e.g. France"
+                    maxlength="100"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ── Section: Photo ────────────────────────────────── -->
+          <div class="new-pet-card mb-4">
+            <div class="new-pet-card-header">
+              <span class="new-pet-section-icon" aria-hidden="true">📷</span>
+              <h2 class="new-pet-section-title">Profile Picture <span class="new-pet-optional-badge">optional</span></h2>
+            </div>
+            <div class="new-pet-card-body">
+
+              <div class="new-pet-photo-area" id="new-pet-photo-area">
+                <!-- Preview -->
+                <div class="new-pet-photo-preview" id="new-pet-photo-preview" aria-hidden="true">
+                  <span class="new-pet-photo-placeholder" id="new-pet-photo-placeholder">🐾</span>
+                  <img id="new-pet-photo-img" class="new-pet-photo-img d-none" alt="Pet picture preview" />
+                </div>
+
+                <!-- Controls -->
+                <div class="new-pet-photo-controls">
+                  <label for="pet-picture" class="btn new-pet-upload-btn" role="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" class="me-1">
+                      <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                      <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                    </svg>
+                    Choose image
+                  </label>
+                  <input
+                    type="file"
+                    id="pet-picture"
+                    name="pet_picture"
+                    accept="image/*"
+                    class="new-pet-file-input visually-hidden"
+                    aria-label="Choose pet profile picture"
+                  />
+                  <button type="button" id="new-pet-photo-clear" class="btn new-pet-clear-btn d-none" aria-label="Remove selected picture">
+                    Remove
+                  </button>
+                  <p class="new-pet-photo-hint mb-0" id="new-pet-photo-hint">
+                    JPG, PNG or WEBP · max 5 MB
+                  </p>
+                </div>
+              </div>
+
+              <p class="new-pet-storage-note mt-2 mb-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" class="me-1 flex-shrink-0">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                </svg>
+                Picture is stored locally for now. Cloud storage via Supabase will be enabled in a future update.
+              </p>
+
+            </div>
+          </div>
+
+          <!-- ── Submit ─────────────────────────────────────────── -->
+          <div class="d-flex gap-3 flex-wrap justify-content-end">
+            <a href="/my-space" data-link class="btn new-pet-cancel-btn">Cancel</a>
+            <button type="submit" class="btn new-pet-submit-btn" id="new-pet-submit">
+              <span class="btn-label">Register Pet</span>
+              <span class="spinner-border spinner-border-sm d-none ms-2" role="status" aria-hidden="true"></span>
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Toast notification -->
+<div class="new-pet-toast-container position-fixed bottom-0 end-0 p-3" style="z-index:1100" aria-live="polite" aria-atomic="true">
+  <div id="new-pet-toast" class="toast align-items-center text-bg-success border-0" role="status">
+    <div class="d-flex">
+      <div class="toast-body fw-semibold" id="new-pet-toast-message">
+        Pet registered successfully! 🎉
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>

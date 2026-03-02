@@ -6,6 +6,7 @@ import { loginPage } from '../pages/login/login.js';
 import { registerPage } from '../pages/register/register.js';
 import { mySpacePage } from '../pages/my-space/my-space.js';
 import { profilePage } from '../pages/profile/profile.js';
+import { newPetPage } from '../pages/pets/new/new-pet.js';
 import { notFoundPage } from '../pages/not-found/not-found.js';
 import { isLoggedIn } from '../lib/auth.js';
 
@@ -16,11 +17,12 @@ const routes = {
   '/register': registerPage,
   '/my-space': mySpacePage,
   '/profile': profilePage,
+  '/pets/new': newPetPage,
   '/404': notFoundPage,
 };
 
 /** Routes that require an authenticated session. */
-const protectedRoutes = new Set(['/my-space', '/profile']);
+const protectedRoutes = new Set(['/my-space', '/profile', '/pets/new']);
 
 const normalizePath = (path) => {
   if (!path) {
