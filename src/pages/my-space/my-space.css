@@ -40,6 +40,22 @@
   font-weight: 500;
 }
 
+.my-space-subtitle-link {
+  font-size: 0.9rem;
+  color: var(--bs-warning-text-emphasis);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(var(--bs-warning-rgb), 0.45);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.my-space-subtitle-link:hover,
+.my-space-subtitle-link:focus {
+  color: var(--bs-emphasis-color);
+  border-color: rgba(var(--bs-warning-rgb), 0.9);
+  text-decoration: none;
+}
+
 .my-space-section {
   background: rgba(255, 255, 255, 0.82);
   border: 1px solid rgba(var(--bs-warning-rgb), 0.38);

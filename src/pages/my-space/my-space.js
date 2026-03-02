@@ -132,7 +132,6 @@ export const mySpacePage = {
     const userId  = session?.user?.id;
 
     const greetingEl    = container.querySelector('#my-space-greeting');
-    const emailEl       = container.querySelector('#my-space-email');
     const petsContainer = container.querySelector('#my-space-pets-grid');
     const storiesContainer = container.querySelector('#my-space-stories-grid');
 
@@ -148,7 +147,6 @@ export const mySpacePage = {
       const profileName = profileResult.data?.name || email;
 
       if (greetingEl) greetingEl.textContent = `Hi, ${profileName}!`;
-      if (emailEl)    emailEl.textContent = profileName;
 
       renderPets(petsContainer, pets);
       renderStories(storiesContainer, stories);

@@ -1,5 +1,5 @@
 import './header.css';
-import { isLoggedIn, clearSession, getDisplayName } from '../../lib/auth.js';
+import { isLoggedIn, clearSession } from '../../lib/auth.js';
 import { supabaseClient } from '../../lib/supabase.js';
 
 /** Dispatch a SPA navigation event (avoids circular dependency with router). */
@@ -9,9 +9,7 @@ const navigate = (path) => {
 
 const buildNavLinks = () => {
   if (isLoggedIn()) {
-    const name = getDisplayName();
     return `
-      <span class="header-user-name">${name ? `Hi, ${name}` : ''}</span>
       <button type="button" class="header-link header-logout-btn nav-link border-0" id="header-logout-btn">
         Logout
       </button>
