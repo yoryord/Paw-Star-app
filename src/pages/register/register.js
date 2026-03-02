@@ -135,21 +135,37 @@ export const registerPage = {
         return;
       }
 
-      const email     = form.email.value.trim();
-      const firstName = form.firstName.value.trim();
-      const lastName  = form.lastName.value.trim();
+      const email = form.email.value.trim();
+      const name  = form.name.value.trim();
 
       setLoading(submitBtn, true);
 
       try {
-        const { error } = await supabaseClient.auth.signUp({
+        const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
           email,
           password,
-          options: { data: { first_name: firstName, last_name: lastName } },
+          options: { data: { name } },
         });
-        if (error) throw error;
+        if (signUpError) throw signUpError;
 
-        window.dispatchEvent(new CustomEvent('paw:navigate', { detail: { path: '/my-space' } }));
+        const userId = signUpData?.user?.id;
+        if (!userId) {
+          // Email confirmation required — inform the user
+          showAlert(
+            alertEl,
+            'Account created! Please check your email to confirm your address, then sign in.',
+            'success'
+          );
+          return;
+        }
+
+        // Create the public profile row
+        const { error: profileError } = await supabaseClient
+          .from('users_profiles')
+          .insert({ id: userId, name });
+        if (profileError) throw profileError;
+
+        window.dispatchEvent(new CustomEvent('paw:navigate', { detail: { path: '/profile' } }));
       } catch (err) {
         showAlert(alertEl, err?.message ?? 'Registration failed. Please try again.', 'error');
       } finally {

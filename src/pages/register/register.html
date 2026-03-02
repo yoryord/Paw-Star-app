@@ -17,35 +17,19 @@
           <!-- Form -->
           <form id="register-form" novalidate>
 
-            <div class="row g-3 mb-3">
-              <div class="col-12 col-sm-6">
-                <label for="register-first-name" class="form-label auth-label">First name</label>
-                <input
-                  type="text"
-                  id="register-first-name"
-                  name="firstName"
-                  class="form-control auth-input"
-                  placeholder="Jane"
-                  autocomplete="given-name"
-                  required
-                  minlength="2"
-                />
-                <div class="invalid-feedback">First name must be at least 2 characters.</div>
-              </div>
-              <div class="col-12 col-sm-6">
-                <label for="register-last-name" class="form-label auth-label">Last name</label>
-                <input
-                  type="text"
-                  id="register-last-name"
-                  name="lastName"
-                  class="form-control auth-input"
-                  placeholder="Doe"
-                  autocomplete="family-name"
-                  required
-                  minlength="2"
-                />
-                <div class="invalid-feedback">Last name must be at least 2 characters.</div>
-              </div>
+            <div class="mb-3">
+              <label for="register-name" class="form-label auth-label">Name</label>
+              <input
+                type="text"
+                id="register-name"
+                name="name"
+                class="form-control auth-input"
+                placeholder="Your display name"
+                autocomplete="name"
+                required
+                minlength="2"
+              />
+              <div class="invalid-feedback">Name must be at least 2 characters.</div>
             </div>
 
             <div class="mb-3">
