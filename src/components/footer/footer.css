@@ -1,3 +1,17 @@
-footer {
+.app-footer {
+  background:
+    linear-gradient(90deg, rgba(var(--bs-warning-rgb), 0.16), rgba(var(--bs-danger-rgb), 0.06));
+  border-color: rgba(var(--bs-warning-rgb), 0.5) !important;
   backdrop-filter: blur(2px);
+}
+
+.footer-link {
+  color: var(--bs-warning-text-emphasis);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover,
+.footer-link:focus {
+  color: var(--bs-emphasis-color);
 }

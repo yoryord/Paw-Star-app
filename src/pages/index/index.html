@@ -1,4 +1,101 @@
-<section class="container py-5">
-  <h1 class="display-6">Welcome to Paw Star</h1>
-  <p class="lead mb-0">Home page scaffold</p>
+<section class="landing-page py-5 py-lg-6">
+  <div class="container">
+    <div class="row g-4 g-lg-5 align-items-center">
+      <div class="col-12">
+        <div id="landingCarousel" class="carousel slide carousel-fade landing-carousel" data-bs-ride="carousel" aria-label="Paw Star pets gallery">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#landingCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#landingCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#landingCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#landingCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+          </div>
+          <div class="carousel-inner rounded-4 overflow-hidden shadow-lg">
+            <div class="carousel-item active" data-bs-interval="5000">
+              <img src="/images_temp/happy-dogs.avif" class="d-block w-100" alt="Happy dogs playing together" />
+            </div>
+            <div class="carousel-item" data-bs-interval="5000">
+              <img src="/images_temp/cat-photo.webp" class="d-block w-100" alt="Cute cat portrait" />
+            </div>
+            <div class="carousel-item" data-bs-interval="5000">
+              <img src="/images_temp/cute-kitten-and-puppy-outdoors-in-grass.webp" class="d-block w-100" alt="Kitten and puppy in the grass" />
+            </div>
+            <div class="carousel-item" data-bs-interval="5000">
+              <img src="/images_temp/pet-portrait-fairfax-va-dogs-cat-studio.jpg" class="d-block w-100" alt="Studio portrait of a dog and cat" />
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#landingCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#landingCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <span class="badge rounded-pill text-bg-primary px-3 py-2 mb-3">Pet Lovers Community</span>
+        <h1 class="display-5 fw-bold mb-3">Share your pet's story with the world on Paw Star</h1>
+        <p class="lead text-secondary mb-4">
+          Create adorable pet profiles, upload photos, and connect with fellow cat and dog lovers through heartfelt stories.
+        </p>
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          <a class="btn btn-primary btn-lg px-4" href="/register">Create Account</a>
+          <a class="btn btn-outline-primary btn-lg px-4" href="/login">Login</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-2 mt-lg-4">
+      <div class="col-12 col-md-4">
+        <article class="feature-card p-4 h-100">
+          <h3 class="h5 fw-semibold">Create Pet Profiles</h3>
+          <p class="text-secondary mb-0">Introduce your pets with photos, a fun biography, and personality details that make them unforgettable.</p>
+        </article>
+      </div>
+      <div class="col-12 col-md-4">
+        <article class="feature-card p-4 h-100">
+          <h3 class="h5 fw-semibold">Write & Share Stories</h3>
+          <p class="text-secondary mb-0">Post memorable moments, tag stories, and inspire other pet lovers with your daily adventures.</p>
+        </article>
+      </div>
+      <div class="col-12 col-md-4">
+        <article class="feature-card p-4 h-100">
+          <h3 class="h5 fw-semibold">Like & Comment</h3>
+          <p class="text-secondary mb-0">Build a warm community by supporting other pets, reacting to stories, and joining the conversation.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="row mt-4 mt-lg-5">
+      <div class="col-12">
+        <article class="stories-cta p-4 p-md-5">
+          <h2 class="stories-eyebrow mb-2">Stories</h2>
+          <p class="h3 fw-bold mb-3">Read our stories and discover adorable moments from cats and dogs every day.</p>
+          <div class="text-center mb-4">
+            <a class="btn btn-warning btn-lg px-4" href="/stories" data-link>Explore Stories</a>
+          </div>
+          <div class="stories-cta-image-wrapper">
+            <img src="/images_temp/shutterstock_393108265-1440x900.jpg" alt="Happy pets and moments" class="img-fluid rounded-3" />
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="row g-3 mt-4 mt-lg-5 landing-stats">
+      <div class="col-6">
+        <article class="stat-card p-3 h-100">
+          <h2 class="h4 mb-1">🐶</h2>
+          <p class="small text-secondary mb-0">Dog Star of the week!</p>
+        </article>
+      </div>
+      <div class="col-6">
+        <article class="stat-card p-3 h-100">
+          <h2 class="h4 mb-1">🐱</h2>
+          <p class="small text-secondary mb-0">Cat Star of the week!</p>
+        </article>
+      </div>
+    </div>
+  </div>
 </section>
