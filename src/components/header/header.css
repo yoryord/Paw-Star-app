@@ -1,13 +1,13 @@
 .app-header {
-  background:
-    linear-gradient(90deg, rgba(var(--bs-warning-rgb), 0.15), rgba(var(--bs-danger-rgb), 0.06));
-  border-color: rgba(var(--bs-warning-rgb), 0.5) !important;
+  background: linear-gradient(90deg, rgba(var(--bs-warning-rgb), 0.12), rgba(var(--bs-warning-rgb), 0.05));
+  border-color: rgba(var(--bs-warning-rgb), 0.4) !important;
 }
 
 .navbar-brand {
   letter-spacing: 0.02em;
   color: var(--bs-emphasis-color);
   font-size: 1.35rem;
+  font-weight: 700;
 }
 
 .navbar-toggler:focus {
@@ -22,24 +22,82 @@
 .navbar-nav {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  align-items: center;
 }
 
+/* Header Navigation Buttons */
 .header-link {
   color: var(--bs-warning-text-emphasis);
   font-weight: 600;
-  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  padding: 0.55rem 1.5rem;
   border-radius: 999px;
-  border: 1px solid rgba(var(--bs-warning-rgb), 0.75);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  border: 1.5px solid rgba(var(--bs-warning-rgb), 0.75);
+  background-color: rgba(var(--bs-warning-rgb), 0.18);
+  transition: all 0.2s ease;
   display: inline-block;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
 }
 
 .header-link:hover,
 .header-link:focus {
-  background-color: rgba(var(--bs-warning-rgb), 0.2);
-  color: var(--bs-emphasis-color);
+  background-color: rgba(var(--bs-warning-rgb), 0.28);
+  border-color: rgba(var(--bs-warning-rgb), 0.85);
+  color: var(--bs-warning-text-emphasis);
+  text-decoration: none;
 }
 
+.header-link:active {
+  background-color: rgba(var(--bs-warning-rgb), 0.35);
+}
+
+.header-logout-btn {
+  cursor: pointer;
+  letter-spacing: inherit;
+}
+
+/* User Name Display */
+.header-user-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--bs-emphasis-color);
+  padding: 0 0.5rem;
+  white-space: nowrap;
+}
+
+/* Desktop Layout */
+@media (min-width: 992px) {
+  .navbar-nav {
+    gap: 1rem !important;
+  }
+
+  .header-link {
+    padding: 0.55rem 1.5rem;
+  }
+
+  /* Desktop order: Stories, My Space, Hi {name}, Logout */
+  .header-stories {
+    order: 1;
+  }
+
+  .header-my-space {
+    order: 2;
+  }
+
+  .header-user-name {
+    margin-left: auto;
+    padding: 0 1rem;
+    order: 3;
+  }
+
+  .header-logout-btn {
+    order: 4;
+  }
+}
+
+/* Mobile Layout */
 @media (max-width: 991.98px) {
   .navbar-collapse {
     padding-top: 0.75rem;
@@ -48,12 +106,34 @@
 
   .navbar-nav {
     flex-direction: column;
-    gap: 0.5rem !important;
+    width: 100%;
+    gap: 0.75rem !important;
+    align-items: center;
   }
 
   .header-link {
-    width: 100%;
+    width: auto;
     text-align: center;
-    padding: 0.6rem 0.75rem;
+    padding: 0.6rem 1.5rem;
+  }
+
+  /* Mobile order: Hi {name}, Logout, My Space, Stories */
+  .header-user-name {
+    width: auto;
+    text-align: center;
+    padding: 0.5rem 0;
+    order: 1;
+  }
+
+  .header-logout-btn {
+    order: 2;
+  }
+
+  .header-my-space {
+    order: 3;
+  }
+
+  .header-stories {
+    order: 4;
   }
 }

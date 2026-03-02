@@ -2,10 +2,16 @@ import { renderHeader } from '../components/header/header.js';
 import { renderFooter } from '../components/footer/footer.js';
 import { indexPage } from '../pages/index/index.js';
 import { storiesPage } from '../pages/stories/stories.js';
+import { loginPage } from '../pages/login/login.js';
+import { registerPage } from '../pages/register/register.js';
+import { mySpacePage } from '../pages/my-space/my-space.js';
 
 const routes = {
   '/': indexPage,
-  '/stories': storiesPage
+  '/stories': storiesPage,
+  '/login': loginPage,
+  '/register': registerPage,
+  '/my-space': mySpacePage
 };
 
 const normalizePath = (path) => {
@@ -54,6 +60,10 @@ const renderRoute = (path) => {
     return;
   }
 
+  // Re-render header on every navigation so auth state is always reflected
+  const headerSlot = document.getElementById('header-slot');
+  if (headerSlot) renderHeader(headerSlot);
+
   currentRoute.render(pageSlot);
   document.title = currentRoute.title;
 };
@@ -85,4 +95,7 @@ export const initRouter = () => {
 
   window.addEventListener('popstate', () => renderRoute(window.location.pathname));
   document.addEventListener('click', handleLinkClick);
+
+  // Pages dispatch this event to trigger SPA navigation without importing navigateTo
+  window.addEventListener('paw:navigate', (e) => navigateTo(e.detail?.path ?? '/'));
 };
