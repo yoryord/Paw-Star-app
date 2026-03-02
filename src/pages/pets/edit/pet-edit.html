@@ -1,0 +1,251 @@
+<section class="pet-edit-page py-5 py-lg-6">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+
+        <!-- Back link (href set dynamically) -->
+        <a id="pet-edit-back-link" href="/" data-link class="pet-edit-back-link mb-4 d-inline-flex align-items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+          </svg>
+          Back to Pet Profile
+        </a>
+
+        <!-- Loading state -->
+        <div id="pet-edit-loading" class="text-center py-5">
+          <span class="spinner-border text-warning" style="width:2.5rem;height:2.5rem;" role="status" aria-label="Loading…"></span>
+        </div>
+
+        <!-- Error state -->
+        <div id="pet-edit-error" class="pet-edit-alert alert-danger d-none" role="alert"></div>
+
+        <!-- Form (hidden until loaded) -->
+        <div id="pet-edit-form-wrap" class="d-none">
+
+          <!-- Page header -->
+          <div class="pet-edit-hero p-4 p-md-5 mb-4">
+            <div class="d-flex align-items-center gap-3">
+              <div class="pet-edit-hero-icon" aria-hidden="true" id="pet-edit-hero-icon">🐾</div>
+              <div>
+                <h1 class="pet-edit-title mb-1">Edit Pet Profile</h1>
+                <p class="pet-edit-subtitle mb-0" id="pet-edit-subtitle">Update your pet's information</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inline alert -->
+          <div id="pet-edit-alert" class="pet-edit-alert d-none" role="alert"></div>
+
+          <!-- Form -->
+          <form id="pet-edit-form" novalidate>
+
+            <!-- ── Section: Basic Info ────────────────────────── -->
+            <div class="pet-edit-card mb-4">
+              <div class="pet-edit-card-header">
+                <span class="pet-edit-section-icon" aria-hidden="true">✏️</span>
+                <h2 class="pet-edit-section-title">Basic Information</h2>
+              </div>
+              <div class="pet-edit-card-body">
+
+                <!-- Name -->
+                <div class="mb-3">
+                  <label for="edit-pet-name" class="pet-edit-label">
+                    Pet Name <span class="text-danger" aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="edit-pet-name"
+                    name="name"
+                    class="form-control pet-edit-input"
+                    placeholder="e.g. Whiskers, Buddy…"
+                    maxlength="100"
+                    required
+                    autocomplete="off"
+                  />
+                  <div class="invalid-feedback">Please enter your pet's name (max 100 characters).</div>
+                </div>
+
+                <!-- Species -->
+                <div class="mb-3">
+                  <label for="edit-pet-species" class="pet-edit-label">
+                    Species <span class="text-danger" aria-hidden="true">*</span>
+                  </label>
+                  <select id="edit-pet-species" name="species" class="form-select pet-edit-input" required>
+                    <option value="" disabled>Select species…</option>
+                    <option value="cat">🐱 Cat</option>
+                    <option value="dog">🐶 Dog</option>
+                  </select>
+                  <div class="invalid-feedback">Please select a species.</div>
+                </div>
+
+                <!-- Breed -->
+                <div class="mb-0">
+                  <label for="edit-pet-breed" class="pet-edit-label">
+                    Breed <span class="text-danger" aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="edit-pet-breed"
+                    name="breed"
+                    class="form-control pet-edit-input"
+                    placeholder="e.g. Persian, Labrador Retriever…"
+                    maxlength="100"
+                    required
+                    autocomplete="off"
+                  />
+                  <div class="invalid-feedback">Please enter your pet's breed.</div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- ── Section: Pet Details ───────────────────────── -->
+            <div class="pet-edit-card mb-4">
+              <div class="pet-edit-card-header">
+                <span class="pet-edit-section-icon" aria-hidden="true">📋</span>
+                <h2 class="pet-edit-section-title">
+                  Pet Details
+                  <span class="pet-edit-optional-badge">optional</span>
+                </h2>
+              </div>
+              <div class="pet-edit-card-body">
+
+                <!-- Birthdate -->
+                <div class="mb-3">
+                  <label for="edit-pet-birthdate" class="pet-edit-label">Date of Birth</label>
+                  <input
+                    type="date"
+                    id="edit-pet-birthdate"
+                    name="birthdate"
+                    class="form-control pet-edit-input"
+                  />
+                  <div class="invalid-feedback">Birthdate cannot be in the future.</div>
+                </div>
+
+                <!-- Birth place -->
+                <div class="mb-0">
+                  <label for="edit-pet-birthplace" class="pet-edit-label">Place of Birth</label>
+                  <input
+                    type="text"
+                    id="edit-pet-birthplace"
+                    name="birth_place"
+                    class="form-control pet-edit-input"
+                    placeholder="e.g. London, UK"
+                    maxlength="150"
+                    autocomplete="off"
+                  />
+                </div>
+
+              </div>
+            </div>
+
+            <!-- ── Section: Location ─────────────────────────── -->
+            <div class="pet-edit-card mb-4">
+              <div class="pet-edit-card-header">
+                <span class="pet-edit-section-icon" aria-hidden="true">📍</span>
+                <h2 class="pet-edit-section-title">
+                  Current Location
+                  <span class="pet-edit-optional-badge">optional</span>
+                </h2>
+              </div>
+              <div class="pet-edit-card-body">
+                <div class="row g-3">
+                  <div class="col-12 col-sm-6">
+                    <label for="edit-pet-city" class="pet-edit-label">City</label>
+                    <input
+                      type="text"
+                      id="edit-pet-city"
+                      name="current_location_city"
+                      class="form-control pet-edit-input"
+                      placeholder="e.g. Paris"
+                      maxlength="100"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <label for="edit-pet-country" class="pet-edit-label">Country</label>
+                    <input
+                      type="text"
+                      id="edit-pet-country"
+                      name="current_location_country"
+                      class="form-control pet-edit-input"
+                      placeholder="e.g. France"
+                      maxlength="100"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Section: Picture ──────────────────────────── -->
+            <div class="pet-edit-card mb-4">
+              <div class="pet-edit-card-header">
+                <span class="pet-edit-section-icon" aria-hidden="true">📷</span>
+                <h2 class="pet-edit-section-title">
+                  Profile Picture
+                  <span class="pet-edit-optional-badge">optional</span>
+                </h2>
+              </div>
+              <div class="pet-edit-card-body">
+                <div class="pet-edit-photo-area">
+                  <div class="pet-edit-photo-preview">
+                    <span class="pet-edit-photo-placeholder" id="pet-edit-photo-placeholder">🐾</span>
+                    <img id="pet-edit-photo-img" class="pet-edit-photo-img d-none" alt="Pet picture preview" />
+                  </div>
+                  <div class="pet-edit-photo-controls">
+                    <label for="edit-pet-picture" class="btn pet-edit-upload-btn" role="button">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" class="me-1">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                        <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                      </svg>
+                      Change image
+                    </label>
+                    <input
+                      type="file"
+                      id="edit-pet-picture"
+                      name="pet_picture"
+                      accept="image/*"
+                      class="pet-edit-file-input visually-hidden"
+                      aria-label="Choose pet profile picture"
+                    />
+                    <button type="button" id="pet-edit-photo-clear" class="pet-edit-clear-btn d-none">Remove photo</button>
+                    <span id="pet-edit-photo-hint" class="pet-edit-photo-hint">JPG, PNG or WEBP · max 5 MB</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Action row ────────────────────────────────── -->
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+              <button type="submit" id="pet-edit-submit" class="pet-edit-submit-btn">
+                <span class="btn-label">Save Changes</span>
+                <span class="spinner-border spinner-border-sm d-none ms-1" role="status" aria-hidden="true"></span>
+              </button>
+              <a id="pet-edit-cancel-btn" href="/" data-link class="pet-edit-cancel-btn">Cancel</a>
+            </div>
+
+          </form>
+
+        </div><!-- /pet-edit-form-wrap -->
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Success toast -->
+  <div
+    id="pet-edit-toast"
+    class="toast align-items-center border-0 pet-edit-toast"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+    style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:1100;"
+  >
+    <div class="d-flex">
+      <div class="toast-body fw-semibold" id="pet-edit-toast-message">Changes saved successfully!</div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+
+</section>

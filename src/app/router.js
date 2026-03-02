@@ -7,6 +7,8 @@ import { registerPage } from '../pages/register/register.js';
 import { mySpacePage } from '../pages/my-space/my-space.js';
 import { profilePage } from '../pages/profile/profile.js';
 import { newPetPage } from '../pages/pets/new/new-pet.js';
+import { petViewPage } from '../pages/pets/view/pet-view.js';
+import { petEditPage } from '../pages/pets/edit/pet-edit.js';
 import { notFoundPage } from '../pages/not-found/not-found.js';
 import { isLoggedIn } from '../lib/auth.js';
 
@@ -20,6 +22,16 @@ const routes = {
   '/pets/new': newPetPage,
   '/404': notFoundPage,
 };
+
+/**
+ * Dynamic routes resolved by regex pattern.
+ * Each entry: { pattern: RegExp, handler: pageModule }
+ * The handler's render() reads params directly from window.location.pathname.
+ */
+const dynamicRoutes = [
+  { pattern: /^\/pets\/[^/]+\/view$/, handler: petViewPage },
+  { pattern: /^\/pets\/[^/]+\/edit$/, handler: petEditPage },
+];
 
 /** Routes that require an authenticated session. */
 const protectedRoutes = new Set(['/my-space', '/profile', '/pets/new']);
@@ -38,7 +50,15 @@ const normalizePath = (path) => {
 
 const getRoute = (path) => {
   const normalizedPath = normalizePath(path);
-  return routes[normalizedPath] ?? notFoundPage;
+
+  // Static routes take priority
+  if (routes[normalizedPath]) return routes[normalizedPath];
+
+  // Fall back to dynamic (pattern-based) routes
+  const dynamic = dynamicRoutes.find(({ pattern }) => pattern.test(normalizedPath));
+  if (dynamic) return dynamic.handler;
+
+  return notFoundPage;
 };
 
 const renderAppShell = () => {

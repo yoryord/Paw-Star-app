@@ -53,7 +53,7 @@ const renderPets = (container, pets) => {
   container.innerHTML = pets.map((pet) => {
     const petName = toSafeText(pet.name);
     const species = toSafeText(pet.species);
-    const petLink = `/my-space/pets/${encodeURIComponent(String(pet.id))}/view`;
+    const petLink = `/pets/${encodeURIComponent(String(pet.id))}/view`;
     const fallbackEmoji = String(pet.species).toLowerCase() === 'dog' ? '🐶' : '🐱';
     const mediaMarkup = pet.pet_picture_url
       ? `<img class="pet-avatar-image" src="${toSafeText(pet.pet_picture_url)}" alt="${petName}" loading="lazy">`

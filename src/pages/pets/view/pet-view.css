@@ -1,0 +1,352 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+/* ─── Page wrapper ─────────────────────────────────────────── */
+.pet-view-page {
+  font-family: 'Manrope', var(--bs-font-sans-serif);
+  background-color: #fffcf7;
+  min-height: calc(100vh - 4rem);
+}
+
+/* ─── Back link ─────────────────────────────────────────────── */
+.pet-view-back-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--bs-warning-text-emphasis);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, gap 0.2s ease;
+}
+
+.pet-view-back-link:hover,
+.pet-view-back-link:focus {
+  opacity: 1;
+  color: var(--bs-warning-text-emphasis);
+  text-decoration: none;
+}
+
+/* ─── Alert ─────────────────────────────────────────────────── */
+.pet-view-alert {
+  border-radius: 0.75rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1.5px solid transparent;
+  margin-bottom: 1.25rem;
+}
+
+.pet-view-alert.alert-danger {
+  background-color: rgba(var(--bs-danger-rgb), 0.1);
+  border-color: rgba(var(--bs-danger-rgb), 0.35);
+  color: var(--bs-danger-text-emphasis);
+}
+
+/* ─── Hero ──────────────────────────────────────────────────── */
+.pet-view-hero {
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg,
+    rgba(var(--bs-warning-rgb), 0.18),
+    rgba(var(--bs-danger-rgb), 0.06));
+  border: 1px solid rgba(var(--bs-warning-rgb), 0.4);
+  box-shadow: 0 0.5rem 1.5rem rgba(168, 99, 41, 0.1);
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* ─── Avatar ────────────────────────────────────────────────── */
+.pet-view-avatar-wrap {
+  flex-shrink: 0;
+}
+
+.pet-view-avatar-ring {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  background: linear-gradient(140deg,
+    rgba(var(--bs-warning-rgb), 1),
+    rgba(var(--bs-danger-rgb), 0.85),
+    rgba(var(--bs-warning-rgb), 0.75));
+  display: grid;
+  place-items: center;
+  padding: 3px;
+}
+
+.pet-view-avatar-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(var(--bs-warning-rgb), 0.13);
+  border: 2.5px solid rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.pet-view-avatar-fallback {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.pet-view-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
+
+/* ─── Hero info ─────────────────────────────────────────────── */
+.pet-view-hero-info {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.pet-view-name {
+  font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.2rem);
+  font-weight: 800;
+  color: var(--bs-emphasis-color);
+  word-break: break-word;
+}
+
+.pet-view-species-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(var(--bs-warning-rgb), 0.18);
+  border: 1px solid rgba(var(--bs-warning-rgb), 0.45);
+  color: var(--bs-warning-text-emphasis);
+  border-radius: 2rem;
+  padding: 0.2rem 0.7rem;
+}
+
+.pet-view-owner-line {
+  font-size: 0.875rem;
+  color: var(--bs-secondary-color);
+}
+
+.pet-view-owner-label {
+  font-weight: 700;
+  margin-right: 0.3rem;
+  color: var(--bs-emphasis-color);
+}
+
+.pet-view-owner-link {
+  font-weight: 600;
+  color: var(--bs-warning-text-emphasis);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(var(--bs-warning-rgb), 0.45);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.pet-view-owner-link:hover,
+.pet-view-owner-link:focus {
+  color: var(--bs-emphasis-color);
+  border-color: rgba(var(--bs-warning-rgb), 0.9);
+  text-decoration: none;
+}
+
+/* ─── Details card ──────────────────────────────────────────── */
+.pet-view-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(var(--bs-warning-rgb), 0.38);
+  border-radius: 1.2rem;
+  box-shadow: 0 0.4rem 1.1rem rgba(var(--bs-dark-rgb), 0.05);
+  overflow: hidden;
+}
+
+.pet-view-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.9rem 1.25rem;
+  background: linear-gradient(90deg,
+    rgba(var(--bs-warning-rgb), 0.12),
+    rgba(var(--bs-warning-rgb), 0.04));
+  border-bottom: 1px solid rgba(var(--bs-warning-rgb), 0.25);
+}
+
+.pet-view-section-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.pet-view-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--bs-emphasis-color);
+  margin: 0;
+}
+
+.pet-view-card-body {
+  padding: 1.25rem;
+}
+
+/* ─── Definition list ───────────────────────────────────────── */
+.pet-view-dl {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+}
+
+.pet-view-dl-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(var(--bs-warning-rgb), 0.15);
+}
+
+.pet-view-dl-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.pet-view-dl-row:first-child {
+  padding-top: 0;
+}
+
+.pet-view-dt {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--bs-secondary-color);
+  min-width: 9rem;
+  flex-shrink: 0;
+}
+
+.pet-view-dd {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--bs-emphasis-color);
+  margin: 0;
+  word-break: break-word;
+}
+
+/* ─── Action buttons ────────────────────────────────────────── */
+.pet-view-actions {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.pet-view-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  background-color: rgba(var(--bs-warning-rgb), 0.15);
+  border: 1.5px solid rgba(var(--bs-warning-rgb), 0.6);
+  color: var(--bs-warning-text-emphasis);
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  padding: 0.55rem 1.25rem;
+  border-radius: 0.65rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.pet-view-edit-btn:hover,
+.pet-view-edit-btn:focus {
+  background-color: rgba(var(--bs-warning-rgb), 0.3);
+  border-color: rgba(var(--bs-warning-rgb), 0.9);
+  color: var(--bs-warning-text-emphasis);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.pet-view-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: 1.5px solid rgba(var(--bs-danger-rgb), 0.45);
+  color: var(--bs-danger-text-emphasis);
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  padding: 0.55rem 1.25rem;
+  border-radius: 0.65rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.pet-view-delete-btn:hover,
+.pet-view-delete-btn:focus {
+  background-color: rgba(var(--bs-danger-rgb), 0.1);
+  border-color: rgba(var(--bs-danger-rgb), 0.75);
+  color: var(--bs-danger-text-emphasis);
+  transform: translateY(-1px);
+}
+
+/* ─── Modal ─────────────────────────────────────────────────── */
+.pet-view-modal-content {
+  border-radius: 1.1rem;
+  border: 1px solid rgba(var(--bs-danger-rgb), 0.2);
+  box-shadow: 0 1rem 2.5rem rgba(var(--bs-dark-rgb), 0.18);
+  font-family: 'Manrope', var(--bs-font-sans-serif);
+}
+
+.pet-view-modal-cancel-btn {
+  background: transparent;
+  border: 1.5px solid rgba(var(--bs-secondary-rgb), 0.35);
+  color: var(--bs-secondary-color);
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 0.9rem;
+  border-radius: 0.6rem;
+  padding: 0.45rem 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.pet-view-modal-cancel-btn:hover,
+.pet-view-modal-cancel-btn:focus {
+  background-color: rgba(var(--bs-secondary-rgb), 0.08);
+  border-color: rgba(var(--bs-secondary-rgb), 0.6);
+  color: var(--bs-emphasis-color);
+}
+
+.pet-view-modal-delete-btn {
+  background-color: var(--bs-danger);
+  border-color: var(--bs-danger);
+  color: #fff;
+  font-weight: 700;
+  font-family: inherit;
+  font-size: 0.9rem;
+  border-radius: 0.6rem;
+  padding: 0.45rem 1rem;
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.pet-view-modal-delete-btn:hover,
+.pet-view-modal-delete-btn:focus {
+  filter: brightness(0.9);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.pet-view-modal-delete-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ─── Responsive tweaks ─────────────────────────────────────── */
+@media (max-width: 480px) {
+  .pet-view-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .pet-view-dt {
+    min-width: 7rem;
+  }
+}
