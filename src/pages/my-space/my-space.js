@@ -23,7 +23,7 @@ const showGridLoading = (container) => {
 const fetchUserPets = async (userId) => {
   const { data, error } = await supabaseClient
     .from('pets')
-    .select('id, name, species, breed')
+    .select('id, name, species, breed, pet_picture_url')
     .eq('owner_id', userId)
     .order('name');
 
@@ -55,8 +55,8 @@ const renderPets = (container, pets) => {
     const species = toSafeText(pet.species);
     const petLink = `/my-space/pets/${encodeURIComponent(String(pet.id))}/view`;
     const fallbackEmoji = String(pet.species).toLowerCase() === 'dog' ? '🐶' : '🐱';
-    const mediaMarkup = pet.picture_url
-      ? `<img class="pet-avatar-image" src="${toSafeText(pet.picture_url)}" alt="${petName}">`
+    const mediaMarkup = pet.pet_picture_url
+      ? `<img class="pet-avatar-image" src="${toSafeText(pet.pet_picture_url)}" alt="${petName}" loading="lazy">`
       : `<span class="pet-avatar-fallback" aria-hidden="true">${fallbackEmoji}</span>`;
 
     return `
