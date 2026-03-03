@@ -57,6 +57,28 @@ const fetchOwnerName = async (ownerId) => {
   return data?.name ?? null;
 };
 
+const fetchPetLikesData = async (petId, userId) => {
+  const [countResult, likedResult] = await Promise.all([
+    supabaseClient
+      .from('pet_likes')
+      .select('pet_id', { count: 'exact', head: true })
+      .eq('pet_id', petId),
+    userId
+      ? supabaseClient
+          .from('pet_likes')
+          .select('pet_id')
+          .eq('pet_id', petId)
+          .eq('user_id', userId)
+          .maybeSingle()
+      : Promise.resolve({ data: null, error: null }),
+  ]);
+
+  return {
+    count: countResult.count ?? 0,
+    liked: !!likedResult.data,
+  };
+};
+
 // ─── Render helpers ───────────────────────────────────────────
 
 const showLoading = (container, visible) => {
@@ -144,6 +166,78 @@ const populatePet = (container, pet, ownerName, isOwner, isAuthenticated) => {
   }
 };
 
+// ─── Like button ─────────────────────────────────────────────
+
+const initPetLikeButton = (container, petId, initialCount, initialLiked, isAuthenticated, userId) => {
+  const btn       = container.querySelector('#pet-like-btn');
+  const countEl   = container.querySelector('#pet-like-count');
+  const outlineEl = container.querySelector('#pet-like-heart-outline');
+  const fillEl    = container.querySelector('#pet-like-heart-fill');
+  if (!btn) return;
+
+  let liked = initialLiked;
+  let count = initialCount;
+
+  const updateUI = () => {
+    countEl.textContent = count > 0 ? String(count) : '0';
+    if (liked) {
+      outlineEl?.classList.add('d-none');
+      fillEl?.classList.remove('d-none');
+      btn.classList.add('liked');
+      btn.setAttribute('aria-label', 'Unlike this pet');
+      btn.title = 'Unlike this pet';
+    } else {
+      outlineEl?.classList.remove('d-none');
+      fillEl?.classList.add('d-none');
+      btn.classList.remove('liked');
+      btn.setAttribute('aria-label', 'Like this pet');
+      btn.title = 'Like this pet';
+    }
+  };
+
+  updateUI();
+
+  if (!isAuthenticated) {
+    btn.disabled = true;
+    btn.title = 'Log in to like this pet';
+    return;
+  }
+
+  btn.addEventListener('click', async () => {
+    btn.disabled = true;
+    const wasLiked = liked;
+
+    // Optimistic update
+    liked = !wasLiked;
+    count = wasLiked ? count - 1 : count + 1;
+    updateUI();
+
+    try {
+      if (wasLiked) {
+        const { error } = await supabaseClient
+          .from('pet_likes')
+          .delete()
+          .eq('pet_id', petId)
+          .eq('user_id', userId);
+        if (error) throw error;
+      } else {
+        const { error } = await supabaseClient
+          .from('pet_likes')
+          .insert({ pet_id: petId, user_id: userId });
+        if (error) throw error;
+      }
+    } catch (err) {
+      console.error('[Pet View] Like toggle failed:', err);
+      // Revert optimistic update
+      liked = wasLiked;
+      count = wasLiked ? count + 1 : count - 1;
+      updateUI();
+    } finally {
+      btn.disabled = false;
+    }
+  });
+};
+
 // ─── Delete ───────────────────────────────────────────────────
 
 const initDelete = (container, pet) => {
@@ -219,14 +313,20 @@ export const petViewPage = {
 
       document.title = `Paw Star | ${pet.name}`;
 
-      const ownerName      = await fetchOwnerName(pet.owner_id);
       const session        = getSession();
       const authenticated  = isLoggedIn();
-      const isOwner        = authenticated && session?.user?.id === pet.owner_id;
+      const userId         = session?.user?.id ?? null;
+      const isOwner        = authenticated && userId === pet.owner_id;
+
+      const [ownerName, likesData] = await Promise.all([
+        fetchOwnerName(pet.owner_id),
+        fetchPetLikesData(petId, userId),
+      ]);
 
       showLoading(container, false);
       showContent(container);
       populatePet(container, pet, ownerName, isOwner, authenticated);
+      initPetLikeButton(container, petId, likesData.count, likesData.liked, authenticated, userId);
       initDelete(container, pet);
 
     } catch (err) {
