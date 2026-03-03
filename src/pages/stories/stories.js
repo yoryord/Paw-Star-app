@@ -1,6 +1,7 @@
 import './stories.css';
 import storiesTemplate from './stories.html?raw';
 import { supabaseClient } from '../../lib/supabase.js';
+import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 // ─── Helpers ─────────────────────────────────────────────────
 
@@ -98,11 +99,127 @@ export const storiesPage = {
   async render(container) {
     container.innerHTML = storiesTemplate;
 
-    const loadingEl = container.querySelector('#stories-loading');
-    const errorEl   = container.querySelector('#stories-error');
-    const emptyEl   = container.querySelector('#stories-empty');
-    const gridEl    = container.querySelector('#stories-grid');
+    const loadingEl       = container.querySelector('#stories-loading');
+    const errorEl         = container.querySelector('#stories-error');
+    const emptyEl         = container.querySelector('#stories-empty');
+    const noResultsEl     = container.querySelector('#stories-no-results');
+    const gridEl          = container.querySelector('#stories-grid');
 
+    // ── Search bar elements ────────────────────────────────────
+    const criteriaBtn     = container.querySelector('#search-criteria-btn');
+    const criteriaIcon    = container.querySelector('.criteria-icon');
+    const criteriaLabel   = container.querySelector('.criteria-label');
+    const criteriaItems   = container.querySelectorAll('.stories-criteria-item');
+    const textInput       = container.querySelector('#search-input-text');
+    const dateInput       = container.querySelector('#search-input-date');
+    const inputClearBtn   = container.querySelector('#search-input-clear');
+    const sortDescBtn     = container.querySelector('#sort-desc');
+    const sortAscBtn      = container.querySelector('#sort-asc');
+    const resetBtn        = container.querySelector('#search-clear');
+
+    let allStories  = [];
+    let ownerNames  = {};
+    let sortAsc     = false;             // default: newest first
+    let activeCriteria = 'title';        // 'title' | 'author' | 'date'
+
+    // ── Bootstrap Dropdown (dynamically injected HTML needs manual init) ────
+    const dropdownInstance = new bootstrap.Dropdown(criteriaBtn);
+
+    // ── Switch criteria ────────────────────────────────────────
+    const setCriteria = (item) => {
+      activeCriteria = item.dataset.criteria;
+      const isDate   = activeCriteria === 'date';
+
+      criteriaIcon.textContent  = item.dataset.icon;
+      criteriaLabel.textContent = item.dataset.criteria.charAt(0).toUpperCase() + item.dataset.criteria.slice(1);
+
+      textInput.placeholder = item.dataset.placeholder ?? '';
+      textInput.value       = '';
+      dateInput.value       = '';
+
+      textInput.classList.toggle('d-none',  isDate);
+      dateInput.classList.toggle('d-none', !isDate);
+
+      criteriaItems.forEach((el) => el.classList.remove('active'));
+      item.classList.add('active');
+
+      applyFiltersAndRender();
+    };
+
+    criteriaItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        setCriteria(item);
+        dropdownInstance.hide();
+      });
+    });
+
+    // ── Filtering & rendering ──────────────────────────────────
+    const applyFiltersAndRender = () => {
+      const textVal = textInput.value.trim().toLowerCase();
+      const dateVal = dateInput.value; // 'YYYY-MM-DD' or ''
+
+      let results = allStories.filter((story) => {
+        if (activeCriteria === 'title') {
+          return !textVal || (story.title ?? '').toLowerCase().includes(textVal);
+        }
+        if (activeCriteria === 'author') {
+          const name = (ownerNames[story.owner_id] ?? '').toLowerCase();
+          return !textVal || name.includes(textVal);
+        }
+        if (activeCriteria === 'date') {
+          const storyDate = story.updated_at ? story.updated_at.slice(0, 10) : '';
+          return !dateVal || storyDate === dateVal;
+        }
+        return true;
+      });
+
+      // Sort by date
+      results = results.slice().sort((a, b) => {
+        const ta = new Date(a.updated_at).getTime();
+        const tb = new Date(b.updated_at).getTime();
+        return sortAsc ? ta - tb : tb - ta;
+      });
+
+      const hasResults = results.length > 0;
+      gridEl.innerHTML = hasResults
+        ? results.map((s) => renderStoryCard(s, ownerNames)).join('')
+        : '';
+
+      noResultsEl?.classList.toggle('d-none', hasResults || !allStories.length);
+      emptyEl?.classList.toggle('d-none', allStories.length > 0);
+    };
+
+    // ── Sort buttons ───────────────────────────────────────────
+    const setSort = (asc) => {
+      sortAsc = asc;
+      sortDescBtn.classList.toggle('active', !asc);
+      sortAscBtn.classList.toggle('active',   asc);
+      applyFiltersAndRender();
+    };
+
+    sortDescBtn?.addEventListener('click', () => setSort(false));
+    sortAscBtn?.addEventListener('click',  () => setSort(true));
+
+    // ── Input listeners ────────────────────────────────────────
+    textInput?.addEventListener('input', applyFiltersAndRender);
+    dateInput?.addEventListener('input', applyFiltersAndRender);
+
+    // ── Clear current input (×) ────────────────────────────────
+    inputClearBtn?.addEventListener('click', () => {
+      textInput.value = '';
+      dateInput.value = '';
+      textInput.focus();
+      applyFiltersAndRender();
+    });
+
+    // ── Reset all filters ──────────────────────────────────────
+    resetBtn?.addEventListener('click', () => {
+      const titleItem = container.querySelector('.stories-criteria-item[data-criteria="title"]');
+      if (titleItem) setCriteria(titleItem);
+      setSort(false);
+    });
+
+    // ── Initial data load ──────────────────────────────────────
     try {
       const stories = await fetchPublishedStories();
 
@@ -113,11 +230,12 @@ export const storiesPage = {
         return;
       }
 
+      allStories = stories;
       const uniqueOwnerIds = [...new Set(stories.map((s) => s.owner_id).filter(Boolean))];
-      const ownerNames = await fetchOwnerNames(uniqueOwnerIds);
+      ownerNames = await fetchOwnerNames(uniqueOwnerIds);
 
-      gridEl.innerHTML = stories.map((s) => renderStoryCard(s, ownerNames)).join('');
       gridEl?.classList.remove('d-none');
+      applyFiltersAndRender();
     } catch (err) {
       console.error('[Stories] Load failed:', err);
       loadingEl?.classList.add('d-none');

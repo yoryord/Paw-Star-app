@@ -3,9 +3,105 @@
     <div class="row justify-content-center">
       <div class="col-12 col-md-10 col-lg-9 col-xl-8">
 
-        <div class="stories-list-header mb-5">
-          <h1 class="stories-list-title">📚 Stories</h1>
+        <div class="stories-list-header mb-4">
+          <h1 class="stories-list-title">📖 Stories</h1>
           <p class="stories-list-subtitle mb-0">Discover adventures and tales from our pet community.</p>
+        </div>
+
+        <!-- Search & Sort bar -->
+        <div class="stories-search-bar mb-4">
+
+          <!-- Single search row -->
+          <div class="stories-search-row">
+            <div class="input-group stories-search-group">
+
+              <!-- Criteria selector -->
+              <div class="dropdown">
+                <button
+                  type="button"
+                  class="btn stories-criteria-btn dropdown-toggle"
+                  id="search-criteria-btn"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  aria-label="Search by"
+                >
+                  <span class="criteria-icon" aria-hidden="true">📖</span>
+                  <span class="criteria-label">Title</span>
+                </button>
+                <ul class="dropdown-menu stories-criteria-menu" aria-labelledby="search-criteria-btn">
+                  <li>
+                    <button class="dropdown-item stories-criteria-item active"
+                      data-criteria="title"
+                      data-icon="📖"
+                      data-placeholder="Search by title…"
+                      data-type="text"
+                    >📖 Title</button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item stories-criteria-item"
+                      data-criteria="author"
+                      data-icon="👤"
+                      data-placeholder="Search by author…"
+                      data-type="text"
+                    >👤 Author</button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item stories-criteria-item"
+                      data-criteria="date"
+                      data-icon="📅"
+                      data-placeholder=""
+                      data-type="date"
+                    >📅 Date</button>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Text input (title / author) -->
+              <input
+                type="text"
+                id="search-input-text"
+                class="form-control stories-search-input"
+                placeholder="Search by title…"
+                autocomplete="off"
+                aria-label="Search"
+              />
+              <!-- Date input (date criteria) -->
+              <input
+                type="date"
+                id="search-input-date"
+                class="form-control stories-search-input d-none"
+                aria-label="Publication date"
+              />
+
+              <!-- Clear input (×) -->
+              <button type="button" class="btn stories-search-clear-btn" id="search-input-clear" title="Clear" aria-label="Clear search">
+                ✕
+              </button>
+
+            </div>
+          </div>
+
+          <!-- Controls row: sort + clear all -->
+          <div class="stories-search-controls">
+            <span class="stories-search-controls-label">Sort by date:</span>
+            <div class="btn-group stories-sort-group" role="group" aria-label="Sort order">
+              <button type="button" id="sort-desc" class="btn btn-sort active" title="Newest first">
+                ↓ Newest
+              </button>
+              <button type="button" id="sort-asc" class="btn btn-sort" title="Oldest first">
+                ↑ Oldest
+              </button>
+            </div>
+            <button type="button" id="search-clear" class="btn btn-clear-search" title="Reset all filters">
+              ✕ Reset
+            </button>
+          </div>
+
+        </div>
+
+        <!-- No results state -->
+        <div id="stories-no-results" class="d-none text-center py-4">
+          <p class="stories-empty-text">No stories match your search. Try different filters. 🐾</p>
         </div>
 
         <!-- Loading state -->

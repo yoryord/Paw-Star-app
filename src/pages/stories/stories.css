@@ -9,8 +9,7 @@
 
 /* ─── Header ────────────────────────────────────────────────── */
 .stories-list-header {
-  border-bottom: 2px solid rgba(var(--bs-warning-rgb), 0.25);
-  padding-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
 }
 
 .stories-list-title {
@@ -168,5 +167,216 @@
   .story-card-cover-wrap {
     width: 6rem;
     min-height: 6rem;
+  }
+}
+
+/* ─── Search bar wrapper ────────────────────────────────────── */
+.stories-search-bar {
+  background: rgba(255, 255, 255, 0.97);
+  border: 1.5px solid rgba(var(--bs-warning-rgb), 0.38);
+  border-radius: 1.15rem;
+  padding: 1rem 1.1rem 0.85rem;
+  box-shadow: 0 0.2rem 0.9rem rgba(var(--bs-dark-rgb), 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+/* ─── Main search row ───────────────────────────────────────── */
+.stories-search-row {
+  width: 100%;
+}
+
+.stories-search-group {
+  border-radius: 0.75rem;
+  border: 1.5px solid rgba(var(--bs-warning-rgb), 0.45);
+  /* override Bootstrap's default outline trick */
+  box-shadow: none !important;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  position: relative;
+}
+
+.stories-search-group:focus-within {
+  border-color: rgba(var(--bs-warning-rgb), 0.8);
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-warning-rgb), 0.18) !important;
+}
+
+/* Criteria selector button */
+.stories-criteria-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.48rem 0.85rem;
+  background: rgba(var(--bs-warning-rgb), 0.13);
+  border: none;
+  border-right: 1.5px solid rgba(var(--bs-warning-rgb), 0.35);
+  border-radius: 0.65rem 0 0 0.65rem !important;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--bs-emphasis-color);
+  white-space: nowrap;
+  transition: background 0.15s;
+  min-width: 7rem;
+}
+
+.stories-criteria-btn:hover,
+.stories-criteria-btn:focus {
+  background: rgba(var(--bs-warning-rgb), 0.22);
+  color: var(--bs-emphasis-color);
+  outline: none;
+  box-shadow: none;
+}
+
+.stories-criteria-btn .criteria-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.stories-criteria-btn .criteria-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+/* Dropdown menu */
+.stories-criteria-menu {
+  min-width: 10rem;
+  border: 1.5px solid rgba(var(--bs-warning-rgb), 0.35);
+  border-radius: 0.75rem;
+  box-shadow: 0 0.4rem 1.2rem rgba(var(--bs-dark-rgb), 0.1);
+  padding: 0.35rem 0;
+  background: #fff;
+}
+
+.stories-criteria-item {
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  color: var(--bs-secondary-color);
+  transition: background 0.13s, color 0.13s;
+}
+
+.stories-criteria-item:hover {
+  background: rgba(var(--bs-warning-rgb), 0.12);
+  color: var(--bs-emphasis-color);
+}
+
+.stories-criteria-item.active {
+  background: rgba(var(--bs-warning-rgb), 0.2);
+  color: var(--bs-emphasis-color);
+}
+
+/* Search text / date input */
+.stories-search-input {
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  background: #fffdf7;
+  padding: 0.48rem 0.85rem;
+  color: var(--bs-body-color);
+  transition: background 0.15s;
+  /* remove the default Bootstrap focus ring — handled by .stories-search-group */
+  box-shadow: none !important;
+  outline: none;
+}
+
+.stories-search-input:focus {
+  background: #fff;
+  box-shadow: none !important;
+}
+
+/* × clear input button */
+.stories-search-clear-btn {
+  padding: 0.48rem 0.8rem;
+  background: transparent;
+  border: none;
+  border-left: 1.5px solid rgba(var(--bs-warning-rgb), 0.28);
+  color: var(--bs-secondary-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 0 0.65rem 0.65rem 0 !important;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1;
+}
+
+.stories-search-clear-btn:hover {
+  color: var(--bs-danger);
+  background: rgba(var(--bs-danger-rgb), 0.06);
+}
+
+/* ─── Controls row (sort + reset) ───────────────────────────── */
+.stories-search-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.1rem;
+  flex-wrap: wrap;
+}
+
+.stories-search-controls-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.045em;
+  color: var(--bs-secondary-color);
+  margin-right: 0.1rem;
+  white-space: nowrap;
+}
+
+.stories-sort-group {
+  border-radius: 0.6rem;
+  overflow: hidden;
+  border: 1.5px solid rgba(var(--bs-warning-rgb), 0.45);
+}
+
+.btn-sort {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.28rem 0.7rem;
+  background: transparent;
+  color: var(--bs-secondary-color);
+  border: none;
+  transition: background 0.15s, color 0.15s;
+  line-height: 1.5;
+}
+
+.btn-sort:hover {
+  background: rgba(var(--bs-warning-rgb), 0.12);
+  color: var(--bs-emphasis-color);
+}
+
+.btn-sort.active {
+  background: rgba(var(--bs-warning-rgb), 0.28);
+  color: var(--bs-emphasis-color);
+}
+
+.btn-clear-search {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.28rem 0.7rem;
+  border-radius: 0.6rem;
+  border: 1.5px solid rgba(var(--bs-secondary-rgb), 0.28);
+  background: transparent;
+  color: var(--bs-secondary-color);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  margin-left: auto;
+  line-height: 1.5;
+}
+
+.btn-clear-search:hover {
+  background: rgba(var(--bs-danger-rgb), 0.07);
+  border-color: rgba(var(--bs-danger-rgb), 0.4);
+  color: var(--bs-danger);
+}
+
+@media (max-width: 480px) {
+  .stories-criteria-btn {
+    min-width: 5.5rem;
+    padding: 0.48rem 0.55rem;
+  }
+  .stories-search-controls-label {
+    display: none;
+  }
+  .btn-clear-search {
+    margin-left: 0;
   }
 }
