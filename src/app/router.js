@@ -14,6 +14,7 @@ import { storyEditPage } from '../pages/stories/edit/story-edit.js';
 import { newStoryPage } from '../pages/stories/new/new-story.js';
 import { notFoundPage } from '../pages/not-found/not-found.js';
 import { publicProfilePage } from '../pages/public-profile/public-profile.js';
+import { adminPage } from '../pages/admin/admin.js';
 import { isLoggedIn } from '../lib/auth.js';
 
 const routes = {
@@ -25,6 +26,7 @@ const routes = {
   '/my-space': mySpacePage,
   '/profile': profilePage,
   '/pets/new': newPetPage,
+  '/admin': adminPage,
   '/404': notFoundPage,
 };
 

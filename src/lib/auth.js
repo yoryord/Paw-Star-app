@@ -8,6 +8,7 @@ import { supabaseClient } from './supabase.js';
 
 let _session = null;
 let _profileName = null;
+let _isAdmin = false;
 
 /** Fetch and cache the display name from public.users_profiles. */
 const loadProfileName = async (userId) => {
@@ -20,6 +21,17 @@ const loadProfileName = async (userId) => {
   _profileName = data?.name ?? null;
 };
 
+/** Fetch and cache the admin role status from public.user_roles. */
+const loadAdminStatus = async (userId) => {
+  if (!userId) { _isAdmin = false; return; }
+  const { data } = await supabaseClient
+    .from('user_roles')
+    .select('user_role')
+    .eq('user_id', userId)
+    .maybeSingle();
+  _isAdmin = data?.user_role === 'admin';
+};
+
 /**
  * Bootstrap: load the current Supabase session and subscribe to changes.
  * Must be awaited before the router renders the first page.
@@ -27,11 +39,15 @@ const loadProfileName = async (userId) => {
 export const initAuth = async () => {
   const { data } = await supabaseClient.auth.getSession();
   _session = data.session ?? null;
-  await loadProfileName(_session?.user?.id);
+  await Promise.all([
+    loadProfileName(_session?.user?.id),
+    loadAdminStatus(_session?.user?.id),
+  ]);
 
   supabaseClient.auth.onAuthStateChange((_event, session) => {
     _session = session ?? null;
     loadProfileName(_session?.user?.id);
+    loadAdminStatus(_session?.user?.id);
   });
 };
 
@@ -48,10 +64,14 @@ export const setSession = () => {};
 export const clearSession = async () => {
   await supabaseClient.auth.signOut();
   _session = null;
+  _isAdmin = false;
 };
 
 /** Convenience boolean check. */
 export const isLoggedIn = () => _session !== null;
+
+/** Returns true when the current user has the 'admin' role. */
+export const isAdmin = () => _isAdmin;
 
 /**
  * Returns a display name for the current user.

@@ -1,5 +1,5 @@
 import './header.css';
-import { isLoggedIn, clearSession } from '../../lib/auth.js';
+import { isLoggedIn, isAdmin, clearSession } from '../../lib/auth.js';
 import { supabaseClient } from '../../lib/supabase.js';
 
 /** Dispatch a SPA navigation event (avoids circular dependency with router). */
@@ -9,11 +9,15 @@ const navigate = (path) => {
 
 const buildNavLinks = () => {
   if (isLoggedIn()) {
+    const adminBtn = isAdmin()
+      ? `<button class="header-link header-admin-btn nav-link border-0" type="button" data-page="/admin">🛡️ Admin</button>`
+      : '';
     return `
       <button type="button" class="header-link header-logout-btn nav-link border-0" id="header-logout-btn">
         Logout
       </button>
       <button class="header-link header-my-space nav-link border-0" type="button" data-page="/my-space">My Space</button>
+      ${adminBtn}
       <button class="header-link header-stories nav-link border-0" type="button" data-page="/stories">Stories</button>
     `;
   }
