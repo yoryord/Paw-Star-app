@@ -180,15 +180,25 @@ export const mySpacePage = {
     showGridLoading(petsContainer);
     showGridLoading(storiesContainer);
 
+    const avatarEl = container.querySelector('#my-space-avatar');
+
     // Load profile name, pets, and stories in parallel
     Promise.all([
-      supabaseClient.from('users_profiles').select('name').eq('id', userId).maybeSingle(),
+      supabaseClient.from('users_profiles').select('name, profile_picture_url').eq('id', userId).maybeSingle(),
       fetchUserPets(userId),
       fetchUserStories(userId),
     ]).then(([profileResult, pets, stories]) => {
       const profileName = profileResult.data?.name || email;
+      const picUrl = profileResult.data?.profile_picture_url;
 
       if (greetingEl) greetingEl.textContent = `Hi, ${profileName}!`;
+
+      if (avatarEl) {
+        const inner = avatarEl.querySelector('.my-space-avatar-inner');
+        if (inner && picUrl) {
+          inner.innerHTML = `<img class="my-space-avatar-img" src="${toSafeText(picUrl)}" alt="${toSafeText(profileName)}" loading="lazy">`;
+        }
+      }
 
       renderPets(petsContainer, pets);
       renderStories(storiesContainer, stories);

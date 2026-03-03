@@ -15,17 +15,43 @@
   box-shadow: 0 0.5rem 1.5rem rgba(168, 99, 41, 0.1);
 }
 
-.my-space-avatar {
-  font-size: 3rem;
-  width: 4rem;
-  height: 4rem;
+.my-space-avatar-ring {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  background: linear-gradient(140deg,
+    rgba(var(--bs-warning-rgb), 1),
+    rgba(var(--bs-danger-rgb), 0.85),
+    rgba(var(--bs-warning-rgb), 0.75));
+  display: grid;
+  place-items: center;
+  padding: 3px;
+  flex-shrink: 0;
+  margin-right: 0.75rem;
+}
+
+.my-space-avatar-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.88);
+  border: 2px solid rgba(255, 255, 255, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.7);
+}
+
+.my-space-avatar-fallback {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.my-space-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 50%;
-  border: 2px solid rgba(var(--bs-warning-rgb), 0.45);
-  flex-shrink: 0;
 }
 
 .my-space-title {

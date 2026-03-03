@@ -392,7 +392,7 @@ const handleSubmit = async (container, status, editorHelper, coverHelper) => {
     setTimeout(() => {
       coverHelper.cleanup();
       window.dispatchEvent(new CustomEvent('paw:navigate', {
-        detail: { path: `/stories/${encodeURIComponent(storyId)}/view` },
+        detail: { path: '/my-space' },
       }));
     }, 1400);
 
