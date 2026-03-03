@@ -13,6 +13,7 @@ import { storyViewPage } from '../pages/stories/view/story-view.js';
 import { storyEditPage } from '../pages/stories/edit/story-edit.js';
 import { newStoryPage } from '../pages/stories/new/new-story.js';
 import { notFoundPage } from '../pages/not-found/not-found.js';
+import { publicProfilePage } from '../pages/public-profile/public-profile.js';
 import { isLoggedIn } from '../lib/auth.js';
 
 const routes = {
@@ -37,6 +38,7 @@ const dynamicRoutes = [
   { pattern: /^\/pets\/[^/]+\/edit$/, handler: petEditPage },
   { pattern: /^\/stories\/[^/]+\/view$/, handler: storyViewPage },
   { pattern: /^\/stories\/[^/]+\/edit$/, handler: storyEditPage },
+  { pattern: /^\/public_profile\/[^/]+$/, handler: publicProfilePage },
 ];
 
 /** Routes that require an authenticated session. */

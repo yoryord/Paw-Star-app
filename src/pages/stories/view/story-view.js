@@ -179,7 +179,7 @@ const populateStory = (container, story, ownerName, isOwner, isAuthenticated) =>
       ownerEl.innerHTML = `<a href="/profile" data-link class="story-view-owner-link">${safeOwnerName} (you)</a>`;
     } else {
       // Authenticated, not owner: link to public profile (not yet implemented)
-      ownerEl.innerHTML = `<a href="/public/${encodeURIComponent(story.owner_id)}" data-link class="story-view-owner-link">${safeOwnerName}</a>`;
+      ownerEl.innerHTML = `<a href="/public_profile/${encodeURIComponent(story.owner_id)}" data-link class="story-view-owner-link">${safeOwnerName}</a>`;
     }
   }
 
@@ -462,7 +462,7 @@ const renderCommentNode = (comment, isAuthenticated, currentUserId, depth = 0) =
   } else if (isOwner) {
     nameHtml = `<a href="/profile" data-link class="comment-author-name comment-author-link">${safeName} <span class="comment-you-badge">you</span></a>`;
   } else {
-    nameHtml = `<a href="/public/${encodeURIComponent(comment.user_id)}" data-link class="comment-author-name comment-author-link">${safeName}</a>`;
+    nameHtml = `<a href="/public_profile/${encodeURIComponent(comment.user_id)}" data-link class="comment-author-name comment-author-link">${safeName}</a>`; 
   }
 
   const depthClass = depth > 0 ? `comment-node--reply comment-depth-${Math.min(depth, 4)}` : 'comment-node--root';

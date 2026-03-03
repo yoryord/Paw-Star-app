@@ -132,7 +132,7 @@ const populatePet = (container, pet, ownerName, isOwner, isAuthenticated) => {
       ownerEl.innerHTML = `<a href="/profile" data-link class="pet-view-owner-link">${safeOwnerName} (you)</a>`;
     } else {
       // Authenticated but not owner: link to public profile
-      ownerEl.innerHTML = `<a href="/public/${encodeURIComponent(pet.owner_id)}" data-link class="pet-view-owner-link">${safeOwnerName}</a>`;
+      ownerEl.innerHTML = `<a href="/public_profile/${encodeURIComponent(pet.owner_id)}" data-link class="pet-view-owner-link">${safeOwnerName}</a>`;
     }
   }
 
