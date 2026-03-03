@@ -29,7 +29,9 @@ const buildHeader = () => `
   <header class="app-header border-bottom sticky-top">
     <nav class="navbar navbar-expand-lg w-100 px-0">
       <div class="container d-flex justify-content-between align-items-center">
-        <a class="navbar-brand fw-semibold mb-0" href="/" data-link>Paw Star</a>
+        <a class="navbar-brand p-0 mb-0" href="/" data-link>
+          <img src="/paw_star_logo_v1.png" alt="Paw Star" class="header-logo" />
+        </a>
         <button class="navbar-toggler border-0 p-2" type="button"
           data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
