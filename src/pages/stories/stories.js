@@ -49,12 +49,18 @@ const fetchOwnerNames = async (ownerIds) => {
 
 // ─── Render helpers ───────────────────────────────────────────
 
+const stripHtml = (html) => {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html ?? '';
+  return tmp.textContent ?? tmp.innerText ?? '';
+};
+
 const truncate = (text, max = 180) =>
   text && text.length > max ? `${text.slice(0, max).trimEnd()}…` : (text ?? '');
 
 const renderStoryCard = (story, ownerNames) => {
   const title     = toSafeText(story.title ?? 'Untitled');
-  const excerpt   = toSafeText(truncate(story.content));
+  const excerpt   = toSafeText(truncate(stripHtml(story.content)));
   const ownerName = toSafeText(ownerNames[story.owner_id] ?? 'Unknown');
   const date      = formatDate(story.updated_at);
   const href      = `/stories/${encodeURIComponent(story.id)}/view`;

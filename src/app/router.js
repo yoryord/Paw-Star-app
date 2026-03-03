@@ -11,12 +11,14 @@ import { petViewPage } from '../pages/pets/view/pet-view.js';
 import { petEditPage } from '../pages/pets/edit/pet-edit.js';
 import { storyViewPage } from '../pages/stories/view/story-view.js';
 import { storyEditPage } from '../pages/stories/edit/story-edit.js';
+import { newStoryPage } from '../pages/stories/new/new-story.js';
 import { notFoundPage } from '../pages/not-found/not-found.js';
 import { isLoggedIn } from '../lib/auth.js';
 
 const routes = {
   '/': indexPage,
   '/stories': storiesPage,
+  '/stories/new': newStoryPage,
   '/login': loginPage,
   '/register': registerPage,
   '/my-space': mySpacePage,
@@ -38,7 +40,7 @@ const dynamicRoutes = [
 ];
 
 /** Routes that require an authenticated session. */
-const protectedRoutes = new Set(['/my-space', '/profile', '/pets/new']);
+const protectedRoutes = new Set(['/my-space', '/profile', '/pets/new', '/stories/new']);
 
 const normalizePath = (path) => {
   if (!path) {

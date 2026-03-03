@@ -6,6 +6,37 @@ import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 // ─── Helpers ─────────────────────────────────────────────────
 
+/**
+ * Minimal allowlist-based HTML sanitizer.
+ * Strips disallowed tags while preserving safe rich-text structure.
+ */
+const sanitizeHtml = (html) => {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+
+  const ALLOWED = new Set([
+    'b', 'strong', 'i', 'em', 'u', 's', 'strike',
+    'h2', 'h3', 'p', 'br',
+    'ul', 'ol', 'li',
+    'blockquote', 'div', 'span',
+  ]);
+
+  const walk = (node) => {
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    const tag = node.tagName.toLowerCase();
+    if (!ALLOWED.has(tag)) {
+      const text = document.createTextNode(node.textContent);
+      node.parentNode?.replaceChild(text, node);
+      return;
+    }
+    [...node.attributes].forEach((a) => node.removeAttribute(a.name));
+    [...node.childNodes].forEach(walk);
+  };
+
+  [...tmp.childNodes].forEach(walk);
+  return tmp.innerHTML;
+};
+
 const toSafeText = (value) =>
   String(value ?? '')
     .replace(/&/g, '&amp;')
@@ -115,9 +146,9 @@ const populateStory = (container, story, ownerName, isOwner, isAuthenticated) =>
     if (story.updated_at) dateEl.setAttribute('datetime', story.updated_at);
   }
 
-  // Story content body
+  // Story content body (stored as sanitized HTML from the rich-text editor)
   const bodyEl = container.querySelector('#story-view-body');
-  if (bodyEl) bodyEl.textContent = story.content ?? '';
+  if (bodyEl) bodyEl.innerHTML = sanitizeHtml(story.content ?? '');
 
   // Owner actions
   if (isOwner) {

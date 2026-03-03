@@ -1,0 +1,255 @@
+<section class="new-story-page py-5 py-lg-6">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-9 col-xl-8">
+
+        <!-- Back link -->
+        <a href="/stories" data-link class="new-story-back-link mb-4 d-inline-flex align-items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+          </svg>
+          Back to Stories
+        </a>
+
+        <!-- Error state -->
+        <div id="new-story-page-error" class="new-story-alert alert-danger d-none" role="alert"></div>
+
+        <!-- Page hero -->
+        <div class="new-story-hero p-4 p-md-5 mb-4">
+          <div class="d-flex align-items-center gap-3">
+            <div class="new-story-hero-icon" aria-hidden="true">✍️</div>
+            <div>
+              <h1 class="new-story-title mb-1">Write a New Story</h1>
+              <p class="new-story-subtitle mb-0">Share an adventure from you and your pet's life</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inline alert -->
+        <div id="new-story-alert" class="new-story-alert d-none" role="alert"></div>
+
+        <!-- Form -->
+        <form id="new-story-form" novalidate>
+
+          <!-- ── Section: Story Details ─────────────────────── -->
+          <div class="new-story-card mb-4">
+            <div class="new-story-card-header">
+              <span class="new-story-section-icon" aria-hidden="true">📌</span>
+              <h2 class="new-story-section-title">Story Details</h2>
+            </div>
+            <div class="new-story-card-body">
+
+              <!-- Title -->
+              <div class="mb-0">
+                <label for="new-story-title" class="new-story-label">
+                  Title <span class="text-danger" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="new-story-title"
+                  name="title"
+                  class="form-control new-story-input"
+                  placeholder="Give your story a catchy title…"
+                  maxlength="200"
+                  required
+                  autocomplete="off"
+                />
+                <div class="invalid-feedback">Please enter a title (max 200 characters).</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ── Section: Tag Pets ──────────────────────────── -->
+          <div class="new-story-card mb-4">
+            <div class="new-story-card-header">
+              <span class="new-story-section-icon" aria-hidden="true">🐾</span>
+              <h2 class="new-story-section-title">
+                Tag Your Pets
+                <span class="new-story-optional-badge">optional</span>
+              </h2>
+            </div>
+            <div class="new-story-card-body">
+
+              <!-- Loading -->
+              <div id="pets-loading" class="text-center py-3">
+                <span class="spinner-border spinner-border-sm text-warning me-2" role="status" aria-hidden="true"></span>
+                <span class="new-story-hint-text">Loading your pets…</span>
+              </div>
+
+              <!-- No pets -->
+              <div id="pets-empty" class="d-none">
+                <p class="new-story-hint-text mb-1">You have no registered pets yet.</p>
+                <a href="/pets/new" data-link class="new-story-inline-link">Register a pet →</a>
+              </div>
+
+              <!-- Pet tags list -->
+              <div id="pets-list" class="new-story-pet-list d-none" role="group" aria-label="Select pets to tag"></div>
+
+            </div>
+          </div>
+
+          <!-- ── Section: Content ───────────────────────────── -->
+          <div class="new-story-card mb-4">
+            <div class="new-story-card-header">
+              <span class="new-story-section-icon" aria-hidden="true">📝</span>
+              <h2 class="new-story-section-title">Story Content</h2>
+            </div>
+            <div class="new-story-card-body p-0">
+
+              <!-- Rich text toolbar -->
+              <div class="new-story-editor-toolbar" id="editor-toolbar" role="toolbar" aria-label="Text formatting">
+
+                <!-- Text style -->
+                <div class="new-story-toolbar-group">
+                  <button type="button" class="new-story-tb-btn" data-cmd="bold" title="Bold (Ctrl+B)" aria-label="Bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8.21 13c2.106 0 3.412-1.087 3.412-2.823 0-1.306-.984-2.283-2.324-2.386v-.055a2.176 2.176 0 0 0 1.852-2.14c0-1.51-1.162-2.46-3.014-2.46H3.843V13zM5.908 4.674h1.696c.963 0 1.517.451 1.517 1.244 0 .834-.629 1.32-1.73 1.32H5.908V4.673zm0 6.788V8.598h1.73c1.217 0 1.88.492 1.88 1.415 0 .943-.643 1.449-1.832 1.449H5.907z"/></svg>
+                  </button>
+                  <button type="button" class="new-story-tb-btn" data-cmd="italic" title="Italic (Ctrl+I)" aria-label="Italic">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M7.991 11.674 9.53 4.455c.123-.595.246-.71 1.347-.807l.11-.52H7.211l-.11.52c1.06.096 1.128.212 1.005.807L6.57 11.674c-.123.595-.246.71-1.346.806l-.11.52h3.774l.11-.52c-1.06-.095-1.128-.211-1.006-.806z"/></svg>
+                  </button>
+                  <button type="button" class="new-story-tb-btn" data-cmd="underline" title="Underline (Ctrl+U)" aria-label="Underline">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M5.313 3.136h-1.23V9.54c0 2.105 1.47 3.623 3.917 3.623s3.917-1.518 3.917-3.623V3.136h-1.23v6.323c0 1.49-.978 2.57-2.687 2.57s-2.687-1.08-2.687-2.57zM3 14h10v1H3z"/></svg>
+                  </button>
+                  <button type="button" class="new-story-tb-btn" data-cmd="strikeThrough" title="Strikethrough" aria-label="Strikethrough">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M6.333 5.686c0 .31.083.581.27.814H5.166a2.8 2.8 0 0 1-.099-.76c0-1.627 1.436-2.768 3.48-2.768 1.969 0 3.39 1.175 3.42 2.895h-1.23c-.007-1.045-.87-1.93-2.22-1.93-1.3 0-2.18.832-2.18 1.75zm2.199 7.494c-1.436 0-2.402-.77-2.414-1.962h-1.23c.016 1.68 1.377 2.927 3.63 2.927 2.239 0 3.866-1.163 3.866-3.2 0-1.616-.968-2.497-2.83-2.945l-.55-.135c-1.017-.237-1.48-.634-1.48-1.233 0-.696.619-1.21 1.59-1.21 1.044 0 1.74.517 1.74 1.33v.11h1.231V9.15c0-1.552-1.34-2.574-3.04-2.574-1.82 0-3.061 1.164-3.061 2.75 0 1.526.96 2.365 2.697 2.765l.55.134c1.197.28 1.666.704 1.666 1.374 0 .791-.718 1.32-1.898 1.32z"/></svg>
+                  </button>
+                </div>
+
+                <div class="new-story-toolbar-divider"></div>
+
+                <!-- Headings -->
+                <div class="new-story-toolbar-group">
+                  <button type="button" class="new-story-tb-btn new-story-tb-btn--text" data-cmd="formatBlock" data-val="h2" title="Heading 2" aria-label="Heading 2">H2</button>
+                  <button type="button" class="new-story-tb-btn new-story-tb-btn--text" data-cmd="formatBlock" data-val="h3" title="Heading 3" aria-label="Heading 3">H3</button>
+                  <button type="button" class="new-story-tb-btn new-story-tb-btn--text" data-cmd="formatBlock" data-val="p" title="Paragraph" aria-label="Paragraph">P</button>
+                </div>
+
+                <div class="new-story-toolbar-divider"></div>
+
+                <!-- Lists -->
+                <div class="new-story-toolbar-group">
+                  <button type="button" class="new-story-tb-btn" data-cmd="insertUnorderedList" title="Bullet list" aria-label="Bullet list">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg>
+                  </button>
+                  <button type="button" class="new-story-tb-btn" data-cmd="insertOrderedList" title="Numbered list" aria-label="Numbered list">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5"/><path d="M1.713 11.865v-.474H2c.217 0 .363-.137.363-.317 0-.185-.158-.31-.361-.31-.223 0-.367.152-.373.31h-.59c.016-.467.373-.787.986-.787.588 0 .954.291.954.745 0 .31-.175.520-.43.601v.031c.  337.059.548.29.548.643 0 .508-.381.787-1.012.787-.614 0-.967-.33-.98-.813h.601c.007.188.171.327.396.327.22 0 .381-.144.381-.34 0-.198-.168-.345-.398-.345h-.276v-.456zM4 4.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0 3a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0 3a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5"/><path d="M1.713 11.865v-.474H2c.217 0 .363-.137.363-.317 0-.185-.158-.31-.361-.31-.223 0-.367.152-.373.31h-.59c.016-.467.373-.787.986-.787.588 0 .954.291.954.745 0 .31-.175.52-.43.601v.031c.337.059.548.29.548.643 0 .508-.381.787-1.012.787-.614 0-.967-.33-.98-.813h.601c.007.188.171.327.396.327.22 0 .381-.144.381-.34 0-.198-.168-.345-.398-.345h-.276v-.456zm0-2.999v-.404h.589v-1.485H1.7l-.33.229-.309-.424.75-.513h.601v2.193h.555V8.866zm2.287-3.366h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1 0-1"/></svg>
+                  </button>
+                </div>
+
+                <div class="new-story-toolbar-divider"></div>
+
+                <!-- Indent -->
+                <div class="new-story-toolbar-group">
+                  <button type="button" class="new-story-tb-btn" data-cmd="indent" title="Indent" aria-label="Indent">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3 8a.5.5 0 0 1 .5-.5h6.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H3.5A.5.5 0 0 1 3 8m-3-5h14v1H0zm0 9h14v1H0z"/></svg>
+                  </button>
+                  <button type="button" class="new-story-tb-btn" data-cmd="outdent" title="Outdent" aria-label="Outdent">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M12 8a.5.5 0 0 0-.5-.5H4.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L4.707 8.5H11.5A.5.5 0 0 0 12 8m3-5H1v1h14zm0 9H1v1h14z"/></svg>
+                  </button>
+                </div>
+
+                <div class="new-story-toolbar-divider"></div>
+
+                <!-- Clear formatting -->
+                <div class="new-story-toolbar-group">
+                  <button type="button" class="new-story-tb-btn" data-cmd="removeFormat" title="Clear formatting" aria-label="Clear formatting">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8.06 1H.5A.5.5 0 0 0 0 1.5v4a.5.5 0 0 0 .5.5H1L7.5 15h1L4.5 6H5l3.625-4.438A.5.5 0 0 0 8.06 1M16 1h-5.5a.5.5 0 0 0-.5.5v.586l6 6V1.5a.5.5 0 0 0-.5-.5"/><path d="M13.646 15.354a.5.5 0 0 0 .708-.708L2.354.646a.5.5 0 0 0-.707.708z"/></svg>
+                  </button>
+                </div>
+
+              </div>
+
+              <!-- Editable content area -->
+              <div
+                id="new-story-editor"
+                class="new-story-editor"
+                contenteditable="true"
+                role="textbox"
+                aria-multiline="true"
+                aria-label="Story content"
+                aria-required="true"
+                spellcheck="true"
+                data-placeholder="Begin your story here… Let the world hear your pet's tale! 🐾"
+              ></div>
+              <div id="new-story-content-error" class="new-story-field-error d-none">Please write some content for your story.</div>
+
+            </div>
+          </div>
+
+          <!-- ── Section: Cover Image ───────────────────────── -->
+          <div class="new-story-card mb-4">
+            <div class="new-story-card-header">
+              <span class="new-story-section-icon" aria-hidden="true">🖼️</span>
+              <h2 class="new-story-section-title">
+                Cover Image
+                <span class="new-story-optional-badge">optional</span>
+              </h2>
+            </div>
+            <div class="new-story-card-body">
+              <div class="new-story-photo-area">
+                <div class="new-story-photo-preview">
+                  <span class="new-story-photo-placeholder" id="new-story-cover-placeholder">📷</span>
+                  <img id="new-story-cover-img" class="new-story-cover-img d-none" alt="Cover preview" />
+                </div>
+                <div class="new-story-photo-controls">
+                  <label for="new-story-cover" class="btn new-story-upload-btn" role="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" class="me-1">
+                      <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                      <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                    </svg>
+                    Choose image
+                  </label>
+                  <input type="file" id="new-story-cover" name="cover_image" accept="image/*" class="d-none" />
+                  <button type="button" id="new-story-cover-clear" class="btn new-story-clear-btn d-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" class="me-1">
+                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                    </svg>
+                    Remove
+                  </button>
+                  <p id="new-story-cover-hint" class="new-story-photo-hint mb-0">JPG, PNG or WEBP · max 5 MB</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Action buttons ─────────────────────────────── -->
+          <div class="new-story-actions d-flex justify-content-end gap-2 flex-wrap mb-2">
+            <a href="/stories" data-link class="btn new-story-cancel-btn">Cancel</a>
+            <button type="submit" id="new-story-draft-btn" name="action" value="draft" class="btn new-story-draft-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" class="me-1">
+                <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z"/>
+                <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z"/>
+                <path d="M8.707 9.207 11 6.914V11.5a.5.5 0 0 1-1 0V8.914l-1.5 1.5a.5.5 0 0 1-.707-.707z"/>
+              </svg>
+              <span class="btn-label">Save as Draft</span>
+              <span class="spinner-border spinner-border-sm d-none ms-1" role="status" aria-hidden="true"></span>
+            </button>
+            <button type="submit" id="new-story-publish-btn" name="action" value="published" class="btn new-story-publish-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" class="me-1">
+                <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/>
+              </svg>
+              <span class="btn-label">Publish</span>
+              <span class="spinner-border spinner-border-sm d-none ms-1" role="status" aria-hidden="true"></span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1090">
+    <div id="new-story-toast" class="toast align-items-center new-story-toast" role="status" aria-live="polite" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center gap-2">
+          <span id="new-story-toast-icon" aria-hidden="true">✅</span>
+          <span id="new-story-toast-message">Story saved.</span>
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+</section>
