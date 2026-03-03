@@ -29,7 +29,22 @@
 
           <!-- Title + meta -->
           <div class="story-view-header mb-4">
-            <h1 id="story-view-title" class="story-view-title mb-3"></h1>
+
+            <!-- Title row with like button pinned to top-right -->
+            <div class="d-flex align-items-start gap-3 mb-3">
+              <h1 id="story-view-title" class="story-view-title flex-grow-1 mb-0"></h1>
+              <button id="story-like-btn" type="button" class="story-like-btn flex-shrink-0" title="Like this story" aria-label="Like this story">
+                <!-- outline heart (default) -->
+                <svg id="story-like-heart-outline" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.885.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+                </svg>
+                <!-- filled heart (shown when liked) -->
+                <svg id="story-like-heart-fill" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" class="d-none">
+                  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                </svg>
+                <span id="story-like-count" class="story-like-count">0</span>
+              </button>
+            </div>
 
             <!-- Status badge (draft) + publish action -->
             <div class="d-flex align-items-center gap-2 flex-wrap mb-3" id="story-view-status-row">
@@ -44,29 +59,42 @@
               </button>
             </div>
 
-            <div class="story-view-meta d-flex flex-wrap align-items-center gap-2">
-              <!-- Owner line -->
-              <span class="story-view-meta-icon" aria-hidden="true">👤</span>
-              <span id="story-view-owner" class="story-view-meta-value"></span>
+            <!-- Bottom row: owner + date (left) | tagged pets (right) -->
+            <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
 
-              <!-- Owner action buttons (owner only) -->
-              <div id="story-view-owner-actions" class="d-none d-inline-flex align-items-center gap-1">
-                <a id="story-view-edit-btn" href="#" data-link class="story-view-icon-btn story-view-icon-btn--edit" title="Edit story" aria-label="Edit story">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                  </svg>
-                </a>
-                <button id="story-view-delete-btn" type="button" class="story-view-icon-btn story-view-icon-btn--delete" title="Delete story" aria-label="Delete story">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                  </svg>
-                </button>
+              <!-- Owner + date stacked -->
+              <div>
+                <!-- Owner line -->
+                <div class="story-view-meta d-flex flex-wrap align-items-center gap-2 mb-1">
+                  <span class="story-view-meta-icon" aria-hidden="true">👤</span>
+                  <span id="story-view-owner" class="story-view-meta-value"></span>
+
+                  <!-- Owner action buttons (owner only) -->
+                  <div id="story-view-owner-actions" class="d-none d-inline-flex align-items-center gap-1">
+                    <a id="story-view-edit-btn" href="#" data-link class="story-view-icon-btn story-view-icon-btn--edit" title="Edit story" aria-label="Edit story">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                      </svg>
+                    </a>
+                    <button id="story-view-delete-btn" type="button" class="story-view-icon-btn story-view-icon-btn--delete" title="Delete story" aria-label="Delete story">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Date (below owner) -->
+                <div class="story-view-meta d-flex align-items-center gap-2">
+                  <span class="story-view-meta-icon" aria-hidden="true">🗓️</span>
+                  <time id="story-view-date" class="story-view-meta-value"></time>
+                </div>
               </div>
 
-              <span class="story-view-meta-sep" aria-hidden="true">·</span>
-              <span class="story-view-meta-icon" aria-hidden="true">🗓️</span>
-              <time id="story-view-date" class="story-view-meta-value"></time>
+              <!-- Tagged pet avatars (right-aligned) -->
+              <div id="story-view-pet-tags" class="story-view-pet-tags d-flex flex-wrap align-items-center gap-2 justify-content-end"></div>
+
             </div>
           </div>
 

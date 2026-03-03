@@ -77,6 +77,134 @@
   word-break: break-word;
 }
 
+/* ─── Like button ───────────────────────────────────────────── */
+.story-like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(var(--bs-danger-rgb), 0.07);
+  border: 1.5px solid rgba(var(--bs-danger-rgb), 0.25);
+  color: var(--bs-danger-text-emphasis);
+  border-radius: 2rem;
+  padding: 0.35rem 0.75rem 0.35rem 0.6rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease, border-color 0.2s ease,
+              color 0.2s ease, transform 0.15s ease,
+              box-shadow 0.2s ease;
+  white-space: nowrap;
+  margin-top: 0.2rem;
+}
+
+.story-like-btn:hover:not(:disabled) {
+  background: rgba(var(--bs-danger-rgb), 0.15);
+  border-color: rgba(var(--bs-danger-rgb), 0.55);
+  transform: scale(1.07);
+  box-shadow: 0 0.2rem 0.6rem rgba(var(--bs-danger-rgb), 0.18);
+}
+
+.story-like-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.story-like-btn.liked {
+  background: rgba(var(--bs-danger-rgb), 0.14);
+  border-color: rgba(var(--bs-danger-rgb), 0.55);
+  color: var(--bs-danger);
+  box-shadow: 0 0.15rem 0.45rem rgba(var(--bs-danger-rgb), 0.22);
+}
+
+.story-like-btn.liked:hover:not(:disabled) {
+  background: rgba(var(--bs-danger-rgb), 0.22);
+  border-color: rgba(var(--bs-danger-rgb), 0.75);
+}
+
+.story-like-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+  pointer-events: none;
+}
+
+.story-like-count {
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-width: 1ch;
+  line-height: 1;
+}
+
+/* ─── Tagged pet avatars ────────────────────────────────────── */
+.story-view-pet-tags {
+  gap: 0.5rem;
+}
+
+.story-view-tagged-pet-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  text-decoration: none;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.story-view-tagged-pet-link:hover,
+.story-view-tagged-pet-link:focus {
+  transform: scale(1.08);
+  opacity: 0.9;
+  outline: none;
+}
+
+.story-view-tagged-pet-ring {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: linear-gradient(140deg,
+    rgba(var(--bs-warning-rgb), 1),
+    rgba(var(--bs-danger-rgb), 0.85),
+    rgba(var(--bs-warning-rgb), 0.75));
+  display: grid;
+  place-items: center;
+  padding: 2.5px;
+  flex-shrink: 0;
+}
+
+.story-view-tagged-pet-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(var(--bs-warning-rgb), 0.13);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.story-view-tagged-pet-fallback {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.story-view-tagged-pet-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
+
+.story-view-tagged-pet-name {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--bs-secondary-color);
+  max-width: 3.2rem;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
 /* ─── Draft badge ───────────────────────────────────────────── */
 .story-view-draft-badge {
   display: inline-flex;

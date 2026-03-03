@@ -86,6 +86,38 @@ const fetchOwnerName = async (ownerId) => {
   return data?.name ?? null;
 };
 
+const fetchTaggedPets = async (storyId) => {
+  const { data, error } = await supabaseClient
+    .from('story_pet_tags')
+    .select('pet_id, pets(id, name, pet_picture_url)')
+    .eq('story_id', storyId);
+
+  if (error) return [];
+  return data?.map((row) => row.pets).filter(Boolean) ?? [];
+};
+
+const fetchLikesData = async (storyId, userId) => {
+  const [countResult, likedResult] = await Promise.all([
+    supabaseClient
+      .from('story_likes')
+      .select('story_id', { count: 'exact', head: true })
+      .eq('story_id', storyId),
+    userId
+      ? supabaseClient
+          .from('story_likes')
+          .select('story_id')
+          .eq('story_id', storyId)
+          .eq('user_id', userId)
+          .maybeSingle()
+      : Promise.resolve({ data: null, error: null }),
+  ]);
+
+  return {
+    count: countResult.count ?? 0,
+    liked: !!likedResult.data,
+  };
+};
+
 // ─── Render helpers ───────────────────────────────────────────
 
 const showLoading = (container, visible) => {
@@ -256,6 +288,103 @@ const initDelete = (container, story) => {
   });
 };
 
+// ─── Tagged pet avatars ───────────────────────────────────────
+
+const renderTaggedPets = (container, pets) => {
+  const tagsEl = container.querySelector('#story-view-pet-tags');
+  if (!tagsEl || !pets.length) return;
+
+  tagsEl.innerHTML = pets
+    .map((pet) => {
+      const name = toSafeText(pet.name ?? '');
+      const pic  = pet.pet_picture_url ? toSafeText(pet.pet_picture_url) : null;
+      return `
+        <a href="/pets/${encodeURIComponent(pet.id)}/view" data-link
+           class="story-view-tagged-pet-link" title="${name}" aria-label="${name}">
+          <div class="story-view-tagged-pet-ring">
+            <div class="story-view-tagged-pet-inner">
+              <span class="story-view-tagged-pet-fallback" aria-hidden="true">🐾</span>
+              ${pic ? `<img class="story-view-tagged-pet-img" src="${pic}" alt="${name}" />` : ''}
+            </div>
+          </div>
+          <span class="story-view-tagged-pet-name">${name}</span>
+        </a>`;
+    })
+    .join('');
+};
+
+// ─── Like button ──────────────────────────────────────────────
+
+const initLikeButton = (container, storyId, initialCount, initialLiked, isAuthenticated, userId) => {
+  const btn       = container.querySelector('#story-like-btn');
+  const countEl   = container.querySelector('#story-like-count');
+  const outlineEl = container.querySelector('#story-like-heart-outline');
+  const fillEl    = container.querySelector('#story-like-heart-fill');
+  if (!btn) return;
+
+  let liked = initialLiked;
+  let count = initialCount;
+
+  const updateUI = () => {
+    countEl.textContent = count > 0 ? String(count) : '0';
+    if (liked) {
+      outlineEl?.classList.add('d-none');
+      fillEl?.classList.remove('d-none');
+      btn.classList.add('liked');
+      btn.setAttribute('aria-label', 'Unlike this story');
+      btn.title = 'Unlike this story';
+    } else {
+      outlineEl?.classList.remove('d-none');
+      fillEl?.classList.add('d-none');
+      btn.classList.remove('liked');
+      btn.setAttribute('aria-label', 'Like this story');
+      btn.title = 'Like this story';
+    }
+  };
+
+  updateUI();
+
+  if (!isAuthenticated) {
+    btn.disabled = true;
+    btn.title = 'Log in to like this story';
+    return;
+  }
+
+  btn.addEventListener('click', async () => {
+    btn.disabled = true;
+    const wasLiked = liked;
+
+    // Optimistic update
+    liked = !wasLiked;
+    count = wasLiked ? count - 1 : count + 1;
+    updateUI();
+
+    try {
+      if (wasLiked) {
+        const { error } = await supabaseClient
+          .from('story_likes')
+          .delete()
+          .eq('story_id', storyId)
+          .eq('user_id', userId);
+        if (error) throw error;
+      } else {
+        const { error } = await supabaseClient
+          .from('story_likes')
+          .insert({ story_id: storyId, user_id: userId });
+        if (error) throw error;
+      }
+    } catch (err) {
+      console.error('[Story View] Like toggle failed:', err);
+      // Revert optimistic update
+      liked = wasLiked;
+      count = wasLiked ? count + 1 : count - 1;
+      updateUI();
+    } finally {
+      btn.disabled = false;
+    }
+  });
+};
+
 // ─── Page export ──────────────────────────────────────────────
 
 export const storyViewPage = {
@@ -284,7 +413,6 @@ export const storyViewPage = {
 
       document.title = `Paw Star | ${story.title}`;
 
-      const ownerName     = await fetchOwnerName(story.owner_id);
       const session       = getSession();
       const authenticated = isLoggedIn();
       const isOwner       = authenticated && session?.user?.id === story.owner_id;
@@ -296,9 +424,17 @@ export const storyViewPage = {
         return;
       }
 
+      const [ownerName, taggedPets, likesData] = await Promise.all([
+        fetchOwnerName(story.owner_id),
+        fetchTaggedPets(storyId),
+        fetchLikesData(storyId, session?.user?.id ?? null),
+      ]);
+
       showLoading(container, false);
       showContent(container);
       populateStory(container, story, ownerName, isOwner, authenticated);
+      renderTaggedPets(container, taggedPets);
+      initLikeButton(container, storyId, likesData.count, likesData.liked, authenticated, session?.user?.id ?? null);
       initPublish(container, story);
       initDelete(container, story);
 
