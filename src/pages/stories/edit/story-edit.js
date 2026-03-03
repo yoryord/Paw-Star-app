@@ -121,7 +121,7 @@ const initCoverUpload = (container, existingUrl) => {
     }
     if (placeholder) placeholder.classList.remove('d-none');
     if (clearBtn)    clearBtn.classList.add('d-none');
-    if (hintEl)      hintEl.textContent = 'JPG, PNG or WEBP · max 5 MB';
+    if (hintEl)      hintEl.textContent = 'JPG, PNG, WEBP or AVIF · max 5 MB';
     if (fileInput)   fileInput.value = '';
     cleared    = true;
     currentUrl = null;
@@ -289,15 +289,15 @@ export const storyEditPage = {
 
           if (newCoverFile && userId) {
             const ext      = newCoverFile.name.split('.').pop().toLowerCase();
-            const filePath = `${userId}/${story.id}.${ext}`;
+            const filePath = `story-cover-pictures/${userId}/${story.id}.${ext}`;
             const { error: uploadErr } = await supabaseClient.storage
-              .from('story-covers')
-              .upload(filePath, newCoverFile, { upsert: true });
+              .from('stories')
+              .upload(filePath, newCoverFile, { upsert: true, contentType: newCoverFile.type });
             if (uploadErr) {
               console.warn('[Story Edit] Cover upload failed:', uploadErr);
             } else {
               const { data: urlData } = supabaseClient.storage
-                .from('story-covers')
+                .from('stories')
                 .getPublicUrl(filePath);
               resolvedCover = urlData?.publicUrl ?? resolvedCover;
             }
@@ -317,15 +317,13 @@ export const storyEditPage = {
 
           showToast(container, 'Story saved successfully.');
 
-          // Update local reference so subsequent saves detect changes correctly
-          story.title           = updates.title;
-          story.content         = updates.content;
-          story.status          = updates.status;
-          story.cover_image_url = updates.cover_image_url ?? story.cover_image_url;
-
-          document.title = `Paw Star | Edit – ${story.title}`;
-          const subtitleEl = container.querySelector('#story-edit-subtitle');
-          if (subtitleEl) subtitleEl.textContent = `Editing: ${story.title}`;
+          // Redirect to story view after a short delay so the toast is visible
+          setTimeout(() => {
+            if (coverHelper) coverHelper.cleanup();
+            window.dispatchEvent(new CustomEvent('paw:navigate', {
+              detail: { path: `/stories/${encodeURIComponent(story.id)}/view` },
+            }));
+          }, 1400);
 
         } catch (err) {
           console.error('[Story Edit] Save failed:', err);

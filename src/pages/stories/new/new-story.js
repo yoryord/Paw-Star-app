@@ -259,7 +259,7 @@ const initCoverUpload = (container) => {
     if (imgEl) { imgEl.src = ''; imgEl.classList.add('d-none'); }
     if (placeholder) placeholder.classList.remove('d-none');
     if (clearBtn)    clearBtn.classList.add('d-none');
-    if (hintEl)      hintEl.textContent = 'JPG, PNG or WEBP · max 5 MB';
+    if (hintEl)      hintEl.textContent = 'JPG, PNG, WEBP or AVIF · max 5 MB';
     if (fileInput)   fileInput.value = '';
   };
 
@@ -353,15 +353,15 @@ const handleSubmit = async (container, status, editorHelper, coverHelper) => {
     let coverUrl = null;
     if (coverFile) {
       const ext      = coverFile.name.split('.').pop().toLowerCase();
-      const filePath = `${userId}/${storyId}.${ext}`;
+      const filePath = `story-cover-pictures/${userId}/${storyId}.${ext}`;
       const { error: uploadErr } = await supabaseClient.storage
-        .from('story-covers')
-        .upload(filePath, coverFile, { upsert: true });
+        .from('stories')
+        .upload(filePath, coverFile, { upsert: true, contentType: coverFile.type });
       if (uploadErr) {
         console.warn('[New Story] Cover upload failed:', uploadErr);
       } else {
         const { data: urlData } = supabaseClient.storage
-          .from('story-covers')
+          .from('stories')
           .getPublicUrl(filePath);
         coverUrl = urlData?.publicUrl ?? null;
         if (coverUrl) {
