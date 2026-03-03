@@ -65,13 +65,21 @@ const setSubmitLoading = (btn, loading) => {
   if (spinner) spinner.classList.toggle('d-none', !loading);
 };
 
-const showToast = (container, message) => {
-  const toastEl = container.querySelector('#story-edit-toast');
-  const msgEl   = container.querySelector('#story-edit-toast-message');
+const showToast = (container, message, icon = '✅') => {
+  const toastEl  = container.querySelector('#story-edit-toast');
+  const msgEl    = container.querySelector('#story-edit-toast-message');
+  const iconEl   = container.querySelector('#story-edit-toast-icon');
   if (!toastEl) return;
-  if (msgEl) msgEl.textContent = message;
-  const toast = bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 3500 });
+  if (msgEl)  msgEl.textContent  = message;
+  if (iconEl) iconEl.textContent = icon;
+  const toast = bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 3000 });
   toast.show();
+};
+
+const setSaveLoading = (container, loading) => {
+  ['#story-edit-draft-btn', '#story-edit-publish-btn'].forEach((sel) => {
+    setSubmitLoading(container.querySelector(sel), loading);
+  });
 };
 
 // ─── Data fetching ────────────────────────────────────────────
@@ -85,6 +93,62 @@ const fetchStory = async (storyId) => {
 
   if (error) throw error;
   return data;
+};
+
+const fetchOwnedPets = async (userId) => {
+  const { data, error } = await supabaseClient
+    .from('pets')
+    .select('id, name, species')
+    .eq('owner_id', userId)
+    .order('name', { ascending: true });
+
+  if (error) throw error;
+  return data ?? [];
+};
+
+const fetchStoryPetTags = async (storyId) => {
+  const { data, error } = await supabaseClient
+    .from('story_pet_tags')
+    .select('pet_id')
+    .eq('story_id', storyId);
+
+  if (error) throw error;
+  return (data ?? []).map((r) => r.pet_id);
+};
+
+// ─── Pet chip list ────────────────────────────────────────────
+
+const renderPetList = (container, pets, selectedIds = []) => {
+  const loadingEl = container.querySelector('#edit-pets-loading');
+  const emptyEl   = container.querySelector('#edit-pets-empty');
+  const listEl    = container.querySelector('#edit-pets-list');
+
+  loadingEl?.classList.add('d-none');
+
+  if (!pets.length) {
+    emptyEl?.classList.remove('d-none');
+    return;
+  }
+
+  const selectedSet = new Set(selectedIds);
+  listEl.innerHTML = pets.map((pet) => {
+    const emoji    = pet.species === 'dog' ? '🐶' : '🐱';
+    const safeName = toSafeText(pet.name);
+    const safeId   = toSafeText(pet.id);
+    const checked  = selectedSet.has(pet.id) ? 'checked' : '';
+    return `
+      <div class="story-edit-pet-chip">
+        <input type="checkbox" id="edit-pet-tag-${safeId}" name="pet_tags" value="${safeId}" ${checked} />
+        <label for="edit-pet-tag-${safeId}">${emoji} ${safeName}</label>
+      </div>`;
+  }).join('');
+
+  listEl.classList.remove('d-none');
+};
+
+const getSelectedPetIds = (container) => {
+  return [...container.querySelectorAll('input[name="pet_tags"]:checked')]
+    .map((el) => el.value);
 };
 
 // ─── Cover image upload helper ────────────────────────────────
@@ -180,6 +244,92 @@ const validateForm = (form) => {
   return valid;
 };
 
+// ─── Save story (shared by draft + publish) ───────────────────
+
+const saveStory = async (container, story, status, coverHelper) => {
+  hideAlert(container);
+
+  const form = container.querySelector('#story-edit-form');
+  if (!validateForm(form)) {
+    showAlert(container, 'Please fill in the title and story content.');
+    return;
+  }
+
+  setSaveLoading(container, true);
+
+  try {
+    const titleEl   = form.querySelector('#edit-story-title');
+    const contentEl = form.querySelector('#edit-story-content');
+
+    const session = getSession();
+    const userId  = session?.user?.id;
+
+    const updates = {
+      title:   titleEl?.value.trim()   ?? story.title,
+      content: contentEl?.value.trim() ?? story.content,
+      status,
+    };
+
+    // ── Resolve cover image URL ─────────────────────────────
+    const newCoverFile = coverHelper?.getFile();
+    let resolvedCover  = coverHelper?.getCurrentUrl() ?? story.cover_image_url;
+    if (coverHelper?.isCleared()) resolvedCover = null;
+
+    if (newCoverFile && userId) {
+      const ext      = newCoverFile.name.split('.').pop().toLowerCase();
+      const filePath = `story-cover-pictures/${userId}/${story.id}.${ext}`;
+      const { error: uploadErr } = await supabaseClient.storage
+        .from('stories')
+        .upload(filePath, newCoverFile, { upsert: true, contentType: newCoverFile.type });
+      if (uploadErr) {
+        console.warn('[Story Edit] Cover upload failed:', uploadErr);
+      } else {
+        const { data: urlData } = supabaseClient.storage
+          .from('stories')
+          .getPublicUrl(filePath);
+        resolvedCover = urlData?.publicUrl ?? resolvedCover;
+      }
+    }
+
+    if (resolvedCover !== story.cover_image_url) {
+      updates.cover_image_url = resolvedCover ?? null;
+    }
+
+    const { error } = await supabaseClient
+      .from('stories')
+      .update(updates)
+      .eq('id', story.id);
+
+    if (error) throw error;
+
+    // ── Update pet tags ──────────────────────────────────────
+    const petIds = getSelectedPetIds(container);
+    await supabaseClient.from('story_pet_tags').delete().eq('story_id', story.id);
+    if (petIds.length) {
+      const tagRows = petIds.map((petId) => ({ story_id: story.id, pet_id: petId }));
+      const { error: tagErr } = await supabaseClient.from('story_pet_tags').insert(tagRows);
+      if (tagErr) console.warn('[Story Edit] Pet tag update failed:', tagErr);
+    }
+
+    const toastMsg  = status === 'published' ? 'Published successfully!' : 'Saved as Draft!';
+    const toastIcon = status === 'published' ? '🌍' : '📝';
+    showToast(container, toastMsg, toastIcon);
+
+    setTimeout(() => {
+      if (coverHelper) coverHelper.cleanup();
+      window.dispatchEvent(new CustomEvent('paw:navigate', {
+        detail: { path: `/stories/${encodeURIComponent(story.id)}/view` },
+      }));
+    }, 1500);
+
+  } catch (err) {
+    console.error('[Story Edit] Save failed:', err);
+    showAlert(container, err?.message ?? 'Failed to save changes. Please try again.');
+  } finally {
+    setSaveLoading(container, false);
+  }
+};
+
 // ─── Populate form ────────────────────────────────────────────
 
 const populateForm = (container, story) => {
@@ -188,11 +338,9 @@ const populateForm = (container, story) => {
 
   const titleEl   = form.querySelector('#edit-story-title');
   const contentEl = form.querySelector('#edit-story-content');
-  const statusEl  = form.querySelector('#edit-story-status');
 
   if (titleEl)   titleEl.value   = story.title   ?? '';
   if (contentEl) contentEl.value = story.content ?? '';
-  if (statusEl)  statusEl.value  = story.status  ?? 'draft';
 
   // Subtitle
   const subtitleEl = container.querySelector('#story-edit-subtitle');
@@ -256,82 +404,24 @@ export const storyEditPage = {
       populateForm(container, story);
       coverHelper = initCoverUpload(container, story.cover_image_url ?? null);
 
-      // ── Form submit ──────────────────────────────────────────
-      const form      = container.querySelector('#story-edit-form');
-      const submitBtn = container.querySelector('#story-edit-submit-btn');
+      // ── Load pets and pre-select existing tags ───────────────
+      const session2 = getSession();
+      Promise.all([
+        fetchOwnedPets(session2?.user?.id),
+        fetchStoryPetTags(story.id),
+      ])
+        .then(([pets, taggedIds]) => renderPetList(container, pets, taggedIds))
+        .catch(() => {
+          container.querySelector('#edit-pets-loading')?.classList.add('d-none');
+          container.querySelector('#edit-pets-empty')?.classList.remove('d-none');
+        });
 
-      form?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        hideAlert(container);
+      // ── Draft & Publish buttons ──────────────────────────────
+      const draftBtn   = container.querySelector('#story-edit-draft-btn');
+      const publishBtn = container.querySelector('#story-edit-publish-btn');
 
-        if (!validateForm(form)) return;
-
-        setSubmitLoading(submitBtn, true);
-
-        try {
-          const titleEl   = form.querySelector('#edit-story-title');
-          const contentEl = form.querySelector('#edit-story-content');
-          const statusEl  = form.querySelector('#edit-story-status');
-
-          const session = getSession();
-          const userId  = session?.user?.id;
-
-          const updates = {
-            title:   titleEl?.value.trim()   ?? story.title,
-            content: contentEl?.value.trim() ?? story.content,
-            status:  statusEl?.value         ?? story.status,
-          };
-
-          // ── Resolve cover image URL ─────────────────────
-          const newCoverFile = coverHelper?.getFile();
-          let resolvedCover  = coverHelper?.getCurrentUrl() ?? story.cover_image_url;
-          if (coverHelper?.isCleared()) resolvedCover = null;
-
-          if (newCoverFile && userId) {
-            const ext      = newCoverFile.name.split('.').pop().toLowerCase();
-            const filePath = `story-cover-pictures/${userId}/${story.id}.${ext}`;
-            const { error: uploadErr } = await supabaseClient.storage
-              .from('stories')
-              .upload(filePath, newCoverFile, { upsert: true, contentType: newCoverFile.type });
-            if (uploadErr) {
-              console.warn('[Story Edit] Cover upload failed:', uploadErr);
-            } else {
-              const { data: urlData } = supabaseClient.storage
-                .from('stories')
-                .getPublicUrl(filePath);
-              resolvedCover = urlData?.publicUrl ?? resolvedCover;
-            }
-          }
-
-          // Only include cover_image_url in the update when it changed
-          if (resolvedCover !== story.cover_image_url) {
-            updates.cover_image_url = resolvedCover ?? null;
-          }
-
-          const { error } = await supabaseClient
-            .from('stories')
-            .update(updates)
-            .eq('id', story.id);
-
-          if (error) throw error;
-
-          showToast(container, 'Story saved successfully.');
-
-          // Redirect to story view after a short delay so the toast is visible
-          setTimeout(() => {
-            if (coverHelper) coverHelper.cleanup();
-            window.dispatchEvent(new CustomEvent('paw:navigate', {
-              detail: { path: `/stories/${encodeURIComponent(story.id)}/view` },
-            }));
-          }, 1400);
-
-        } catch (err) {
-          console.error('[Story Edit] Save failed:', err);
-          showAlert(container, err?.message ?? 'Failed to save changes. Please try again.');
-        } finally {
-          setSubmitLoading(submitBtn, false);
-        }
-      });
+      draftBtn?.addEventListener('click', () => saveStory(container, story, 'draft', coverHelper));
+      publishBtn?.addEventListener('click', () => saveStory(container, story, 'published', coverHelper));
 
     } catch (err) {
       console.error('[Story Edit] Load failed:', err);

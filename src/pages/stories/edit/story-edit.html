@@ -48,7 +48,7 @@
               <div class="story-edit-card-body">
 
                 <!-- Title -->
-                <div class="mb-3">
+                <div class="mb-0">
                   <label for="edit-story-title" class="story-edit-label">
                     Title <span class="text-danger" aria-hidden="true">*</span>
                   </label>
@@ -65,16 +65,34 @@
                   <div class="invalid-feedback">Please enter a title (max 200 characters).</div>
                 </div>
 
-                <!-- Status -->
-                <div class="mb-0">
-                  <label for="edit-story-status" class="story-edit-label">
-                    Status <span class="text-danger" aria-hidden="true">*</span>
-                  </label>
-                  <select id="edit-story-status" name="status" class="form-select story-edit-input" required>
-                    <option value="draft">📝 Draft</option>
-                    <option value="published">🌍 Published</option>
-                  </select>
+              </div>
+            </div>
+
+            <!-- ── Section: Tag Pets ───────────────────────── -->
+            <div class="story-edit-card mb-4">
+              <div class="story-edit-card-header">
+                <span class="story-edit-section-icon" aria-hidden="true">🐾</span>
+                <h2 class="story-edit-section-title">
+                  Tag Your Pets
+                  <span class="story-edit-optional-badge">optional</span>
+                </h2>
+              </div>
+              <div class="story-edit-card-body">
+
+                <!-- Loading -->
+                <div id="edit-pets-loading" class="text-center py-3">
+                  <span class="spinner-border spinner-border-sm text-warning me-2" role="status" aria-hidden="true"></span>
+                  <span class="story-edit-hint-text">Loading your pets…</span>
                 </div>
+
+                <!-- No pets -->
+                <div id="edit-pets-empty" class="d-none">
+                  <p class="story-edit-hint-text mb-1">You have no registered pets yet.</p>
+                  <a href="/pets/new" data-link class="story-edit-inline-link">Register a pet →</a>
+                </div>
+
+                <!-- Pet tags list -->
+                <div id="edit-pets-list" class="story-edit-pet-list d-none" role="group" aria-label="Select pets to tag"></div>
 
               </div>
             </div>
@@ -148,8 +166,12 @@
             <!-- Submit -->
             <div class="d-flex justify-content-end gap-2 mb-2">
               <a id="story-edit-cancel-btn" href="#" data-link class="btn story-edit-cancel-btn">Cancel</a>
-              <button type="submit" id="story-edit-submit-btn" class="btn story-edit-submit-btn">
-                <span class="btn-label">Save Changes</span>
+              <button type="button" id="story-edit-draft-btn" class="btn story-edit-draft-btn">
+                <span class="btn-label">Save as Draft</span>
+                <span class="spinner-border spinner-border-sm d-none ms-1" role="status" aria-hidden="true"></span>
+              </button>
+              <button type="button" id="story-edit-publish-btn" class="btn story-edit-publish-btn">
+                <span class="btn-label">Publish</span>
                 <span class="spinner-border spinner-border-sm d-none ms-1" role="status" aria-hidden="true"></span>
               </button>
             </div>
@@ -166,7 +188,7 @@
     <div id="story-edit-toast" class="toast align-items-center story-edit-toast" role="status" aria-live="polite" aria-atomic="true">
       <div class="d-flex">
         <div class="toast-body d-flex align-items-center gap-2">
-          <span aria-hidden="true">✅</span>
+          <span aria-hidden="true" id="story-edit-toast-icon">✅</span>
           <span id="story-edit-toast-message">Changes saved successfully.</span>
         </div>
         <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>

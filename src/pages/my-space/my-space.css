@@ -253,24 +253,28 @@
   position: absolute;
   top: 0.6rem;
   right: 0.6rem;
+  z-index: 2;
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 700;
   padding: 0.3rem 0.58rem;
   border: 1px solid transparent;
   text-transform: lowercase;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.18);
 }
 
 .story-status-badge.published {
-  background: rgba(var(--bs-success-rgb), 0.18);
+  background: rgba(255, 255, 255, 0.82);
   color: var(--bs-success-text-emphasis);
-  border-color: rgba(var(--bs-success-rgb), 0.34);
+  border-color: rgba(var(--bs-success-rgb), 0.55);
 }
 
 .story-status-badge.draft {
-  background: rgba(var(--bs-warning-rgb), 0.2);
+  background: rgba(255, 255, 255, 0.82);
   color: var(--bs-warning-text-emphasis);
-  border-color: rgba(var(--bs-warning-rgb), 0.44);
+  border-color: rgba(var(--bs-warning-rgb), 0.65);
 }
 
 @media (max-width: 575.98px) {
@@ -312,27 +316,33 @@
 
 .story-view-icon-btn--edit {
   color: var(--bs-warning-text-emphasis);
-  border-color: rgba(var(--bs-warning-rgb), 0.4);
-  background: rgba(var(--bs-warning-rgb), 0.1);
+  border-color: rgba(var(--bs-warning-rgb), 0.8);
+  background: rgb(255, 248, 225);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
 }
 
 .story-view-icon-btn--edit:hover,
 .story-view-icon-btn--edit:focus {
-  background: rgba(var(--bs-warning-rgb), 0.22);
-  border-color: rgba(var(--bs-warning-rgb), 0.7);
+  background: #fff;
+  border-color: rgba(var(--bs-warning-rgb), 1);
   color: var(--bs-warning-text-emphasis);
 }
 
 .story-view-icon-btn--delete {
   color: var(--bs-danger-text-emphasis);
-  border-color: rgba(var(--bs-danger-rgb), 0.35);
-  background: rgba(var(--bs-danger-rgb), 0.08);
+  border-color: rgba(var(--bs-danger-rgb), 0.75);
+  background: rgb(255, 235, 235);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
 }
 
 .story-view-icon-btn--delete:hover,
 .story-view-icon-btn--delete:focus {
-  background: rgba(var(--bs-danger-rgb), 0.18);
-  border-color: rgba(var(--bs-danger-rgb), 0.6);
+  background: #fff;
+  border-color: rgba(var(--bs-danger-rgb), 1);
   color: var(--bs-danger-text-emphasis);
 }
 
