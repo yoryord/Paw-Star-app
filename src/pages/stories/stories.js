@@ -3,6 +3,10 @@ import storiesTemplate from './stories.html?raw';
 import { supabaseClient } from '../../lib/supabase.js';
 import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
+// ─── Constants ────────────────────────────────────────────
+
+const STORIES_PER_PAGE = 10;
+
 // ─── Helpers ─────────────────────────────────────────────────
 
 const toSafeText = (value) =>
@@ -121,6 +125,12 @@ export const storiesPage = {
     let ownerNames  = {};
     let sortAsc     = false;             // default: newest first
     let activeCriteria = 'title';        // 'title' | 'author' | 'date'
+    let filteredStories = [];            // current filtered+sorted results
+    let currentPageNum  = 1;            // current pagination page
+
+    // ── Pagination elements ──────────────────────────────────────
+    const paginationEl = container.querySelector('#stories-pagination');
+    const pageListEl   = container.querySelector('#stories-page-list');
 
     // ── Bootstrap Dropdown (dynamically injected HTML needs manual init) ────
     const dropdownInstance = new bootstrap.Dropdown(criteriaBtn);
@@ -154,7 +164,7 @@ export const storiesPage = {
     });
 
     // ── Filtering & rendering ──────────────────────────────────
-    const applyFiltersAndRender = () => {
+    const applyFiltersAndRender = (resetPage = true) => {
       const textVal = textInput.value.trim().toLowerCase();
       const dateVal = dateInput.value; // 'YYYY-MM-DD' or ''
 
@@ -180,13 +190,79 @@ export const storiesPage = {
         return sortAsc ? ta - tb : tb - ta;
       });
 
-      const hasResults = results.length > 0;
-      gridEl.innerHTML = hasResults
-        ? results.map((s) => renderStoryCard(s, ownerNames)).join('')
-        : '';
+      filteredStories = results;
+      if (resetPage) currentPageNum = 1;
 
+      const hasResults = results.length > 0;
       noResultsEl?.classList.toggle('d-none', hasResults || !allStories.length);
       emptyEl?.classList.toggle('d-none', allStories.length > 0);
+
+      renderCurrentPage();
+    };
+
+    // ── Render one page of stories ──────────────────────────────
+    const renderCurrentPage = () => {
+      const start = (currentPageNum - 1) * STORIES_PER_PAGE;
+      const pageItems = filteredStories.slice(start, start + STORIES_PER_PAGE);
+
+      gridEl.innerHTML = pageItems.length
+        ? pageItems.map((s) => renderStoryCard(s, ownerNames)).join('')
+        : '';
+
+      renderStoriesPagination();
+    };
+
+    // ── Render pagination controls ──────────────────────────────
+    const renderStoriesPagination = () => {
+      const totalPages = Math.ceil(filteredStories.length / STORIES_PER_PAGE);
+      if (totalPages <= 1) {
+        paginationEl?.classList.add('d-none');
+        return;
+      }
+      paginationEl?.classList.remove('d-none');
+      if (!pageListEl) return;
+
+      const page = currentPageNum;
+      const PREV_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/></svg>`;
+      const NEXT_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>`;
+
+      // Build visible page numbers with ellipsis
+      const visible = new Set([1, totalPages]);
+      for (let i = Math.max(1, page - 2); i <= Math.min(totalPages, page + 2); i++) visible.add(i);
+      const visibleSorted = [...visible].sort((a, b) => a - b);
+
+      let numbersHtml = '';
+      let prev = 0;
+      visibleSorted.forEach((p) => {
+        if (prev && p - prev > 1) {
+          numbersHtml += `<li class="page-item disabled"><span class="page-link stories-page-link" aria-hidden="true">…</span></li>`;
+        }
+        numbersHtml += `<li class="page-item${p === page ? ' active' : ''}"><button class="page-link stories-page-link" data-page="${p}"${p === page ? ' aria-current="page"' : ''}>${p}</button></li>`;
+        prev = p;
+      });
+
+      pageListEl.innerHTML = `
+        <li class="page-item${page <= 1 ? ' disabled' : ''}">
+          <button class="page-link stories-page-link" id="stories-prev-btn" aria-label="Previous page">${PREV_SVG}</button>
+        </li>
+        ${numbersHtml}
+        <li class="page-item${page >= totalPages ? ' disabled' : ''}">
+          <button class="page-link stories-page-link" id="stories-next-btn" aria-label="Next page">${NEXT_SVG}</button>
+        </li>`;
+
+      pageListEl.querySelector('#stories-prev-btn')?.addEventListener('click', () => {
+        if (currentPageNum > 1) { currentPageNum--; renderCurrentPage(); gridEl.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+      pageListEl.querySelector('#stories-next-btn')?.addEventListener('click', () => {
+        if (currentPageNum < totalPages) { currentPageNum++; renderCurrentPage(); gridEl.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+      pageListEl.querySelectorAll('[data-page]').forEach((btn) =>
+        btn.addEventListener('click', () => {
+          currentPageNum = parseInt(btn.dataset.page, 10);
+          renderCurrentPage();
+          gridEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        })
+      );
     };
 
     // ── Sort buttons ───────────────────────────────────────────
