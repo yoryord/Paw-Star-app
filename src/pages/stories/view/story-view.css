@@ -91,7 +91,6 @@
   color: var(--bs-secondary-color);
   border-radius: 2rem;
   padding: 0.2rem 0.65rem;
-  margin-bottom: 0.75rem;
 }
 
 /* ─── Meta bar ──────────────────────────────────────────────── */
@@ -258,4 +257,50 @@
 
 .story-view-modal-delete-btn:disabled {
   opacity: 0.7;
+}
+
+/* ─── Publish button ────────────────────────────────────────── */
+.story-view-publish-btn {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-family: inherit;
+  padding: 0.2rem 0.7rem;
+  border-radius: 2rem;
+  border: 1.5px solid rgba(var(--bs-warning-rgb), 0.55);
+  background: rgba(var(--bs-warning-rgb), 0.15);
+  color: var(--bs-warning-text-emphasis);
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+}
+
+.story-view-publish-btn:hover:not(:disabled),
+.story-view-publish-btn:focus:not(:disabled) {
+  background: rgba(var(--bs-warning-rgb), 0.28);
+  border-color: rgba(var(--bs-warning-rgb), 0.85);
+  transform: translateY(-1px);
+}
+
+.story-view-publish-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ─── Toast ─────────────────────────────────────────────────── */
+.story-view-toast {
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(var(--bs-warning-rgb), 0.45);
+  border-radius: 0.9rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(168, 99, 41, 0.14);
+  font-family: 'Manrope', var(--bs-font-sans-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-width: 16rem;
+}
+
+.story-view-toast .toast-body {
+  color: var(--bs-warning-text-emphasis);
 }

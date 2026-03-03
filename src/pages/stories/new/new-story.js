@@ -333,25 +333,42 @@ const handleSubmit = async (container, status, editorHelper, coverHelper) => {
     const rawHtml = editorHelper.getHtml();
     const content = sanitizeHtml(rawHtml);
 
-    // Cover image: just store local path for now (consistent with pet pages)
-    const coverFile = coverHelper.getFile();
-    const coverUrl  = coverFile ? `images_temp/stories/${coverFile.name}` : null;
-
-    // ── Insert story ─────────────────────────────────────────
+    // ── Insert story (without cover first, so we have the storyId for the path)
     const { data: created, error: insertErr } = await supabaseClient
       .from('stories')
       .insert({
-        owner_id:        userId,
+        owner_id: userId,
         title,
         content,
         status,
-        cover_image_url: coverUrl,
       })
       .select('id')
       .single();
 
     if (insertErr) throw insertErr;
     const storyId = created.id;
+
+    // ── Upload cover image if provided ───────────────────────
+    const coverFile = coverHelper.getFile();
+    let coverUrl = null;
+    if (coverFile) {
+      const ext      = coverFile.name.split('.').pop().toLowerCase();
+      const filePath = `${userId}/${storyId}.${ext}`;
+      const { error: uploadErr } = await supabaseClient.storage
+        .from('story-covers')
+        .upload(filePath, coverFile, { upsert: true });
+      if (uploadErr) {
+        console.warn('[New Story] Cover upload failed:', uploadErr);
+      } else {
+        const { data: urlData } = supabaseClient.storage
+          .from('story-covers')
+          .getPublicUrl(filePath);
+        coverUrl = urlData?.publicUrl ?? null;
+        if (coverUrl) {
+          await supabaseClient.from('stories').update({ cover_image_url: coverUrl }).eq('id', storyId);
+        }
+      }
+    }
 
     // ── Insert pet tags ──────────────────────────────────────
     const petIds = getSelectedPetIds(container);

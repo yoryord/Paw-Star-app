@@ -103,6 +103,16 @@ const showContent = (container) => {
   container.querySelector('#story-view-content')?.classList.remove('d-none');
 };
 
+const showToast = (message, icon = '\uD83C\uDF0D') => {
+  const toastEl = document.querySelector('#story-view-toast');
+  const msgEl   = document.querySelector('#story-view-toast-message');
+  const iconEl  = document.querySelector('#story-view-toast-icon');
+  if (!toastEl) return;
+  if (msgEl)  msgEl.textContent  = message;
+  if (iconEl) iconEl.textContent = icon;
+  bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 3000 }).show();
+};
+
 const populateStory = (container, story, ownerName, isOwner, isAuthenticated) => {
   // Cover image
   if (story.cover_image_url) {
@@ -116,9 +126,12 @@ const populateStory = (container, story, ownerName, isOwner, isAuthenticated) =>
   const titleEl = container.querySelector('#story-view-title');
   if (titleEl) titleEl.textContent = story.title ?? '';
 
-  // Draft badge
+  // Draft badge + Publish button
   if (story.status === 'draft') {
     container.querySelector('#story-view-draft-badge')?.classList.remove('d-none');
+    if (isOwner) {
+      container.querySelector('#story-view-publish-btn')?.classList.remove('d-none');
+    }
   }
 
   // Owner line
@@ -157,6 +170,45 @@ const populateStory = (container, story, ownerName, isOwner, isAuthenticated) =>
     if (actionsEl) actionsEl.classList.remove('d-none');
     if (editBtn)   editBtn.href = `/stories/${encodeURIComponent(story.id)}/edit`;
   }
+};
+
+// ─── Publish ────────────────────────────────────────
+
+const initPublish = (container, story) => {
+  const publishBtn = container.querySelector('#story-view-publish-btn');
+  if (!publishBtn) return;
+
+  publishBtn.addEventListener('click', async () => {
+    const label   = publishBtn.querySelector('.btn-label');
+    const spinner = publishBtn.querySelector('.spinner-border');
+
+    publishBtn.disabled = true;
+    if (label)   label.style.opacity = '0.6';
+    if (spinner) spinner.classList.remove('d-none');
+
+    try {
+      const { error } = await supabaseClient
+        .from('stories')
+        .update({ status: 'published' })
+        .eq('id', story.id);
+
+      if (error) throw error;
+
+      // Update UI: hide draft badge + publish button
+      container.querySelector('#story-view-draft-badge')?.classList.add('d-none');
+      publishBtn.classList.add('d-none');
+
+      showToast('Story published successfully! 🎉');
+
+    } catch (err) {
+      console.error('[Story View] Publish failed:', err);
+      showError(container, err?.message ?? 'Failed to publish the story. Please try again.');
+    } finally {
+      publishBtn.disabled = false;
+      if (label)   label.style.opacity = '1';
+      if (spinner) spinner.classList.add('d-none');
+    }
+  });
 };
 
 // ─── Delete ───────────────────────────────────────────────────
@@ -247,6 +299,7 @@ export const storyViewPage = {
       showLoading(container, false);
       showContent(container);
       populateStory(container, story, ownerName, isOwner, authenticated);
+      initPublish(container, story);
       initDelete(container, story);
 
     } catch (err) {

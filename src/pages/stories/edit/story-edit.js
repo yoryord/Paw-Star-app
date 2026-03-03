@@ -157,15 +157,10 @@ const initCoverUpload = (container, existingUrl) => {
   clearBtn?.addEventListener('click', clearPreview);
 
   return {
-    getResolvedUrl() {
-      const newFile = fileInput?.files?.[0];
-      if (newFile) return `images_temp/stories/${newFile.name}`;
-      if (cleared)  return null;
-      return currentUrl;
-    },
-    cleanup() {
-      if (objectUrl) URL.revokeObjectURL(objectUrl);
-    },
+    getFile()      { return fileInput?.files?.[0] ?? null; },
+    isCleared()    { return cleared; },
+    getCurrentUrl(){ return currentUrl; },
+    cleanup()      { if (objectUrl) URL.revokeObjectURL(objectUrl); },
   };
 };
 
@@ -278,13 +273,36 @@ export const storyEditPage = {
           const contentEl = form.querySelector('#edit-story-content');
           const statusEl  = form.querySelector('#edit-story-status');
 
+          const session = getSession();
+          const userId  = session?.user?.id;
+
           const updates = {
             title:   titleEl?.value.trim()   ?? story.title,
             content: contentEl?.value.trim() ?? story.content,
             status:  statusEl?.value         ?? story.status,
           };
 
-          const resolvedCover = coverHelper?.getResolvedUrl();
+          // ── Resolve cover image URL ─────────────────────
+          const newCoverFile = coverHelper?.getFile();
+          let resolvedCover  = coverHelper?.getCurrentUrl() ?? story.cover_image_url;
+          if (coverHelper?.isCleared()) resolvedCover = null;
+
+          if (newCoverFile && userId) {
+            const ext      = newCoverFile.name.split('.').pop().toLowerCase();
+            const filePath = `${userId}/${story.id}.${ext}`;
+            const { error: uploadErr } = await supabaseClient.storage
+              .from('story-covers')
+              .upload(filePath, newCoverFile, { upsert: true });
+            if (uploadErr) {
+              console.warn('[Story Edit] Cover upload failed:', uploadErr);
+            } else {
+              const { data: urlData } = supabaseClient.storage
+                .from('story-covers')
+                .getPublicUrl(filePath);
+              resolvedCover = urlData?.publicUrl ?? resolvedCover;
+            }
+          }
+
           // Only include cover_image_url in the update when it changed
           if (resolvedCover !== story.cover_image_url) {
             updates.cover_image_url = resolvedCover ?? null;
