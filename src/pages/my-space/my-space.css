@@ -216,9 +216,17 @@
     rgba(var(--bs-danger-rgb), 0.1));
   border-bottom: 1px solid rgba(var(--bs-warning-rgb), 0.2);
   position: relative;
+  overflow: hidden;
 }
 
-.story-card-image img {
+.story-card-image-link {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.story-card-image-link img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -274,4 +282,132 @@
     width: 5rem;
     height: 5rem;
   }
+}
+
+/* ─── Story card actions overlay ───────────────────────── */
+.story-card-actions {
+  position: absolute;
+  bottom: 0.55rem;
+  left: 0.55rem;
+  display: flex;
+  gap: 0.35rem;
+  z-index: 2;
+}
+
+/* ─── Icon action buttons (mirrors story-view.css) ─────── */
+.story-view-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.45rem;
+  border: 1.5px solid transparent;
+  background: none;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  padding: 0;
+  text-decoration: none;
+}
+
+.story-view-icon-btn--edit {
+  color: var(--bs-warning-text-emphasis);
+  border-color: rgba(var(--bs-warning-rgb), 0.4);
+  background: rgba(var(--bs-warning-rgb), 0.1);
+}
+
+.story-view-icon-btn--edit:hover,
+.story-view-icon-btn--edit:focus {
+  background: rgba(var(--bs-warning-rgb), 0.22);
+  border-color: rgba(var(--bs-warning-rgb), 0.7);
+  color: var(--bs-warning-text-emphasis);
+}
+
+.story-view-icon-btn--delete {
+  color: var(--bs-danger-text-emphasis);
+  border-color: rgba(var(--bs-danger-rgb), 0.35);
+  background: rgba(var(--bs-danger-rgb), 0.08);
+}
+
+.story-view-icon-btn--delete:hover,
+.story-view-icon-btn--delete:focus {
+  background: rgba(var(--bs-danger-rgb), 0.18);
+  border-color: rgba(var(--bs-danger-rgb), 0.6);
+  color: var(--bs-danger-text-emphasis);
+}
+
+/* ─── Story card title link ──────────────────────────── */
+.story-card-view-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 0.45rem;
+}
+
+.story-card-view-link:hover .story-title,
+.story-card-view-link:focus .story-title {
+  color: var(--bs-warning-text-emphasis);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ─── Show more / show less button ───────────────────── */
+.story-show-more-btn {
+  display: inline-block;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 0.3rem;
+  color: var(--bs-warning-text-emphasis);
+  font-size: 0.83rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+
+.story-show-more-btn:hover,
+.story-show-more-btn:focus {
+  color: var(--bs-emphasis-color);
+}
+
+/* ─── Delete confirm modal ──────────────────────────── */
+.my-space-modal-content {
+  border-radius: 1rem;
+  border: 1px solid rgba(var(--bs-warning-rgb), 0.3);
+}
+
+.my-space-modal-cancel-btn {
+  background: rgba(var(--bs-secondary-rgb), 0.1);
+  border: 1px solid rgba(var(--bs-secondary-rgb), 0.3);
+  color: var(--bs-secondary-color);
+  border-radius: 0.6rem;
+  font-weight: 600;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.875rem;
+}
+
+.my-space-modal-cancel-btn:hover {
+  background: rgba(var(--bs-secondary-rgb), 0.18);
+}
+
+.my-space-modal-delete-btn {
+  background: rgba(var(--bs-danger-rgb), 0.9);
+  border: none;
+  color: #fff;
+  border-radius: 0.6rem;
+  font-weight: 700;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.875rem;
+  transition: background 0.2s ease;
+}
+
+.my-space-modal-delete-btn:hover {
+  background: rgba(var(--bs-danger-rgb), 1);
+}
+
+.my-space-modal-delete-btn:disabled {
+  opacity: 0.7;
 }

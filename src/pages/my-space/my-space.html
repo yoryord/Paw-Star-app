@@ -37,7 +37,12 @@
         <section class="my-space-section">
           <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
             <h2 class="my-space-section-title mb-0">My stories</h2>
-            <span class="my-space-section-note">Published and drafts</span>
+            <a href="/stories/new" data-link class="btn btn-sm my-space-add-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" class="me-1">
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+              </svg>
+              Write a story
+            </a>
           </div>
 
           <div class="row g-4" id="my-space-stories-grid"></div>
@@ -46,4 +51,27 @@
     </div>
 
   </div>
+
+  <!-- Story delete confirm modal -->
+  <div class="modal fade" id="my-space-story-delete-modal" tabindex="-1" aria-labelledby="my-space-story-delete-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content my-space-modal-content">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="my-space-story-delete-label">Delete Story</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pt-2">
+          <p class="mb-0">Are you sure you want to delete <strong id="my-space-story-delete-title"></strong>? This action <strong>cannot be undone</strong>.</p>
+        </div>
+        <div class="modal-footer border-0 pt-0 gap-2">
+          <button type="button" class="btn my-space-modal-cancel-btn" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn my-space-modal-delete-btn" id="my-space-story-delete-confirm">
+            <span class="btn-label">Yes, delete</span>
+            <span class="spinner-border spinner-border-sm d-none ms-1" role="status" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </section>

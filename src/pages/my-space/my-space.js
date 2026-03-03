@@ -2,6 +2,7 @@ import './my-space.css';
 import mySpaceTemplate from './my-space.html?raw';
 import { getSession, isLoggedIn } from '../../lib/auth.js';
 import { supabaseClient } from '../../lib/supabase.js';
+import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const toSafeText = (value) => String(value ?? '')
   .replace(/&/g, '&amp;')
@@ -9,6 +10,16 @@ const toSafeText = (value) => String(value ?? '')
   .replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;')
   .replace(/'/g, '&#39;');
+
+const stripHtml = (html) => {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html ?? '';
+  return tmp.textContent ?? '';
+};
+
+const EDIT_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/></svg>`;
+
+const DELETE_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/><path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/></svg>`;
 
 const showGridLoading = (container) => {
   if (!container) return;
@@ -34,7 +45,7 @@ const fetchUserPets = async (userId) => {
 const fetchUserStories = async (userId) => {
   const { data, error } = await supabaseClient
     .from('stories')
-    .select('id, title, content, status')
+    .select('id, title, content, status, cover_image_url')
     .eq('owner_id', userId)
     .order('created_at', { ascending: false });
 
@@ -75,11 +86,13 @@ const renderPets = (container, pets) => {
   }).join('');
 };
 
+const SHORT_LIMIT = 220;
+
 const renderStories = (container, stories) => {
   if (!container) return;
 
   if (!stories.length) {
-    container.innerHTML = '<div class="col-12"><div class="my-space-empty">No stories yet. Create your first draft.</div></div>';
+    container.innerHTML = '<div class="col-12"><div class="my-space-empty">No stories yet. Write your first story!</div></div>';
     return;
   }
 
@@ -90,26 +103,55 @@ const renderStories = (container, stories) => {
 
   container.innerHTML = sortedStories.map((story) => {
     const title = toSafeText(story.title);
-    const storyLink = `/my-space/my-stories/${encodeURIComponent(String(story.id))}/view`;
+    const safeId = toSafeText(String(story.id));
+    const encodedId = encodeURIComponent(String(story.id));
+    const viewLink = `/stories/${encodedId}/view`;
+    const editLink = `/stories/${encodedId}/edit`;
     const status = String(story.status ?? 'draft').toLowerCase() === 'published' ? 'published' : 'draft';
-    const excerptSource = story.content ? String(story.content).trim() : '';
-    const excerpt = excerptSource.length > 170
-      ? `${toSafeText(excerptSource.slice(0, 167))}...`
-      : toSafeText(excerptSource || 'No content preview yet.');
-    const imageMarkup = ''; // cover_image_url not yet in schema
+
+    const fullText = stripHtml(story.content ?? '');
+    const isLong = fullText.length > SHORT_LIMIT;
+    const shortText = isLong ? fullText.slice(0, SHORT_LIMIT) + '\u2026' : '';
+    const excerptText = isLong
+      ? toSafeText(shortText)
+      : toSafeText(fullText || 'No content preview yet.');
+
+    const showMoreMarkup = isLong
+      ? `<button type="button" class="story-show-more-btn"
+           data-full="${toSafeText(fullText)}"
+           data-short="${toSafeText(shortText)}"
+           aria-expanded="false">Show more</button>`
+      : '';
+
+    const imageMarkup = story.cover_image_url
+      ? `<img src="${toSafeText(story.cover_image_url)}" alt="${title}" loading="lazy">`
+      : '';
 
     return `
       <div class="col-12 col-lg-6">
-        <a class="story-card" href="${storyLink}" aria-label="Open ${title}">
+        <div class="story-card">
           <div class="story-card-image">
-            ${imageMarkup}
+            <a href="${viewLink}" data-link class="story-card-image-link" aria-label="Read ${title}" tabindex="-1">${imageMarkup}</a>
             <span class="story-status-badge ${status}">${status}</span>
+            <div class="story-card-actions">
+              <a href="${editLink}" data-link
+                 class="story-view-icon-btn story-view-icon-btn--edit"
+                 title="Edit story" aria-label="Edit story">${EDIT_ICON}</a>
+              <button type="button"
+                      class="story-view-icon-btn story-view-icon-btn--delete"
+                      data-delete-id="${safeId}"
+                      data-delete-title="${title}"
+                      title="Delete story" aria-label="Delete story">${DELETE_ICON}</button>
+            </div>
           </div>
           <div class="story-card-content">
-            <h3 class="story-title">${title}</h3>
-            <p class="story-excerpt">${excerpt}</p>
+            <a href="${viewLink}" data-link class="story-card-view-link">
+              <h3 class="story-title">${title}</h3>
+            </a>
+            <p class="story-excerpt">${excerptText}</p>
+            ${showMoreMarkup}
           </div>
-        </a>
+        </div>
       </div>
     `;
   }).join('');
@@ -150,6 +192,7 @@ export const mySpacePage = {
 
       renderPets(petsContainer, pets);
       renderStories(storiesContainer, stories);
+      initStoryActions(storiesContainer, container);
     }).catch((err) => {
       console.error('[My Space] Failed to load data:', err);
       const errMsg = '<div class="col-12"><div class="my-space-empty">Could not load data. Please try again later.</div></div>';
@@ -158,3 +201,90 @@ export const mySpacePage = {
     });
   },
 };
+
+// ─── Story interactions ───────────────────────────────────────
+
+function initStoryActions(storiesContainer, pageContainer) {
+  if (!storiesContainer) return;
+
+  // Show more / show less toggle
+  storiesContainer.addEventListener('click', (e) => {
+    const btn = e.target.closest('.story-show-more-btn');
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+    const excerptEl = btn.previousElementSibling;
+    if (!excerptEl) return;
+
+    if (isExpanded) {
+      excerptEl.textContent = btn.dataset.short;
+      btn.textContent = 'Show more';
+      btn.setAttribute('aria-expanded', 'false');
+    } else {
+      excerptEl.textContent = btn.dataset.full;
+      btn.textContent = 'Show less';
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  // Delete story
+  const modalEl    = pageContainer.querySelector('#my-space-story-delete-modal');
+  const titleEl    = pageContainer.querySelector('#my-space-story-delete-title');
+  const confirmBtn = pageContainer.querySelector('#my-space-story-delete-confirm');
+  if (!modalEl) return;
+
+  const deleteModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  let pendingDeleteId = null;
+
+  storiesContainer.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-delete-id]');
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    pendingDeleteId = btn.dataset.deleteId;
+    if (titleEl) titleEl.textContent = btn.dataset.deleteTitle || 'this story';
+    deleteModal.show();
+  });
+
+  confirmBtn?.addEventListener('click', async () => {
+    if (!pendingDeleteId) return;
+
+    const label   = confirmBtn.querySelector('.btn-label');
+    const spinner = confirmBtn.querySelector('.spinner-border');
+
+    confirmBtn.disabled = true;
+    if (label)   label.style.opacity = '0.6';
+    if (spinner) spinner.classList.remove('d-none');
+
+    try {
+      const { error } = await supabaseClient
+        .from('stories')
+        .delete()
+        .eq('id', pendingDeleteId);
+
+      if (error) throw error;
+
+      deleteModal.hide();
+
+      // Remove the card from the DOM
+      const card = storiesContainer.querySelector(`[data-delete-id="${pendingDeleteId}"]`)?.closest('.col-12');
+      card?.remove();
+
+      // Show empty state if no stories remain
+      if (!storiesContainer.querySelector('.story-card')) {
+        storiesContainer.innerHTML = '<div class="col-12"><div class="my-space-empty">No stories yet. Write your first story!</div></div>';
+      }
+    } catch (err) {
+      console.error('[My Space] Delete story failed:', err);
+      deleteModal.hide();
+    } finally {
+      pendingDeleteId = null;
+      confirmBtn.disabled = false;
+      if (label)   label.style.opacity = '1';
+      if (spinner) spinner.classList.add('d-none');
+    }
+  });
+}
