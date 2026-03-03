@@ -177,6 +177,21 @@
   margin-top: 0.3rem;
 }
 
+/* ─── Textarea ─────────────────────────────────────────────── */
+.new-pet-textarea {
+  resize: vertical;
+  min-height: 6rem;
+  max-height: 20rem;
+  overflow-y: auto;
+  line-height: 1.6;
+}
+
+@media (max-width: 575.98px) {
+  .new-pet-textarea {
+    max-height: 14rem;
+  }
+}
+
 /* ─── Photo upload ──────────────────────────────────────────── */
 .new-pet-photo-area {
   display: flex;

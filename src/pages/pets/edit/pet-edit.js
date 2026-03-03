@@ -80,7 +80,7 @@ const fetchPet = async (petId) => {
   const { data, error } = await supabaseClient
     .from('pets')
     .select(
-      'id, owner_id, name, species, breed, birthdate, birth_place, current_location_city, current_location_country, pet_picture_url',
+      'id, owner_id, name, species, breed, birthdate, birth_place, current_location_city, current_location_country, about_pet, pet_picture_url',
     )
     .eq('id', petId)
     .maybeSingle();
@@ -235,6 +235,7 @@ const populateForm = (container, pet) => {
   setValue('#edit-pet-birthplace', pet.birth_place);
   setValue('#edit-pet-city',       pet.current_location_city);
   setValue('#edit-pet-country',    pet.current_location_country);
+  setValue('#edit-pet-about',      pet.about_pet);
 
   // Hero icon and subtitle
   const iconEl    = container.querySelector('#pet-edit-hero-icon');
@@ -275,6 +276,7 @@ const handleSubmit = async (event, container, petId, photoHelper) => {
       birth_place:              form.querySelector('#edit-pet-birthplace').value.trim() || null,
       current_location_city:    form.querySelector('#edit-pet-city').value.trim() || null,
       current_location_country: form.querySelector('#edit-pet-country').value.trim() || null,
+      about_pet:                form.querySelector('#edit-pet-about').value.trim() || null,
       pet_picture_url:          petPictureUrl,
     };
 

@@ -232,6 +232,25 @@
   word-break: break-word;
 }
 
+/* ─── About text ────────────────────────────────────────────── */
+.pet-view-dl-row--top {
+  align-items: flex-start;
+}
+
+.pet-view-dl-row--top .pet-view-dt {
+  padding-top: 0.1rem; /* keeps label optically aligned with first text line */
+}
+
+.pet-view-about-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--bs-emphasis-color);
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
 /* ─── Action buttons ────────────────────────────────────────── */
 .pet-view-actions {
   display: flex;

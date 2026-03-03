@@ -37,7 +37,7 @@ const fetchPet = async (petId) => {
   const { data, error } = await supabaseClient
     .from('pets')
     .select(
-      'id, owner_id, name, species, breed, birthdate, birth_place, current_location_city, current_location_country, pet_picture_url',
+      'id, owner_id, name, species, breed, birthdate, birth_place, current_location_city, current_location_country, about_pet, pet_picture_url',
     )
     .eq('id', petId)
     .maybeSingle();
@@ -126,6 +126,14 @@ const populatePet = (container, pet, ownerName, isOwner, isAuthenticated) => {
 
   const locationParts = [pet.current_location_city, pet.current_location_country].filter(Boolean);
   setText('#pet-view-location', locationParts.join(', '));
+
+  // About the Pet
+  const aboutRow  = container.querySelector('#pet-view-row-about');
+  const aboutText = container.querySelector('#pet-view-about-text');
+  if (pet.about_pet?.trim()) {
+    if (aboutText) aboutText.textContent = pet.about_pet.trim();
+    if (aboutRow)  aboutRow.classList.remove('d-none');
+  }
 
   // Owner actions
   if (isOwner) {

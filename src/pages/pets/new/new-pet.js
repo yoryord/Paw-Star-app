@@ -199,6 +199,7 @@ const handleSubmit = async (event, container, photoHelper) => {
     const birthPlace   = form.querySelector('#pet-birth-place').value.trim() || null;
     const cityVal      = form.querySelector('#pet-city').value.trim() || null;
     const countryVal   = form.querySelector('#pet-country').value.trim() || null;
+    const aboutPet     = form.querySelector('#pet-about').value.trim() || null;
 
     // ── Insert pet record first (without picture) to obtain ID ─
     const petRecord = {
@@ -210,6 +211,7 @@ const handleSubmit = async (event, container, photoHelper) => {
       birth_place:              birthPlace,
       current_location_city:    cityVal,
       current_location_country: countryVal,
+      about_pet:                aboutPet,
       pet_picture_url:          null,
     };
 
