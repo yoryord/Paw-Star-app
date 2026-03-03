@@ -200,15 +200,7 @@ const handleSubmit = async (event, container, photoHelper) => {
     const cityVal      = form.querySelector('#pet-city').value.trim() || null;
     const countryVal   = form.querySelector('#pet-country').value.trim() || null;
 
-    // ── Pet picture URL: local path for now ────────────────────
-    // Images should be placed under images_temp/pets/ during development.
-    // Supabase Storage upload will replace this in a future update.
-    let petPictureUrl = null;
-    const picFile = photoHelper.getFile();
-    if (picFile) {
-      petPictureUrl = `images_temp/pets/${picFile.name}`;
-    }
-
+    // ── Insert pet record first (without picture) to obtain ID ─
     const petRecord = {
       owner_id:                 userId,
       name:                     nameVal,
@@ -218,14 +210,44 @@ const handleSubmit = async (event, container, photoHelper) => {
       birth_place:              birthPlace,
       current_location_city:    cityVal,
       current_location_country: countryVal,
-      pet_picture_url:          petPictureUrl,
+      pet_picture_url:          null,
     };
 
-    const { error } = await supabaseClient
+    const { data: inserted, error: insertError } = await supabaseClient
       .from('pets')
-      .insert(petRecord);
+      .insert(petRecord)
+      .select('id')
+      .single();
 
-    if (error) throw error;
+    if (insertError) throw insertError;
+
+    const newPetId = inserted.id;
+
+    // ── Upload picture to Supabase Storage ─────────────────────
+    const picFile = photoHelper.getFile();
+    if (picFile) {
+      const ext      = picFile.name.split('.').pop().toLowerCase();
+      const filePath = `pet-profile-pictures/${userId}/${newPetId}.${ext}`;
+
+      const { error: uploadError } = await supabaseClient.storage
+        .from('pets')
+        .upload(filePath, picFile, { upsert: true, contentType: picFile.type });
+
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabaseClient.storage
+        .from('pets')
+        .getPublicUrl(filePath);
+
+      const petPictureUrl = urlData?.publicUrl ?? null;
+
+      const { error: updateError } = await supabaseClient
+        .from('pets')
+        .update({ pet_picture_url: petPictureUrl })
+        .eq('id', newPetId);
+
+      if (updateError) throw updateError;
+    }
 
     // ── Success ────────────────────────────────────────────────
     showToast(container, `${toSafeText(nameVal)} was registered successfully! 🎉`);

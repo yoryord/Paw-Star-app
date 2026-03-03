@@ -160,17 +160,35 @@ const initPhotoUpload = (container, existingUrl) => {
   clearBtn?.addEventListener('click', clearPreview);
 
   return {
-    /** Returns the URL/path to save, or null to clear, or UNCHANGED sentinel */
-    getResolvedUrl() {
+    /**
+     * Uploads a new picture to Supabase Storage (if one was selected) and
+     * returns the public URL to store in DB, null to clear, or the existing
+     * URL if nothing changed.
+     */
+    async resolveUrl(petId) {
       const newFile = fileInput?.files?.[0];
 
       if (newFile) {
-        // New file selected – use local-path convention (same as new-pet.js)
-        return `images_temp/pets/${newFile.name}`;
+        const session  = getSession();
+        const userId   = session?.user?.id;
+        const ext      = newFile.name.split('.').pop().toLowerCase();
+        const filePath = `pet-profile-pictures/${userId}/${petId}.${ext}`;
+
+        const { error: uploadError } = await supabaseClient.storage
+          .from('pets')
+          .upload(filePath, newFile, { upsert: true, contentType: newFile.type });
+
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = supabaseClient.storage
+          .from('pets')
+          .getPublicUrl(filePath);
+
+        return urlData?.publicUrl ?? null;
       }
 
-      if (cleared) return null;        // User cleared it
-      return currentUrl;              // Unchanged
+      if (cleared) return null;   // User removed the picture
+      return currentUrl;         // Unchanged
     },
     cleanup() {
       if (objectUrl) URL.revokeObjectURL(objectUrl);
@@ -247,6 +265,8 @@ const handleSubmit = async (event, container, petId, photoHelper) => {
   setSubmitLoading(submitBtn, true);
 
   try {
+    const petPictureUrl = await photoHelper.resolveUrl(petId);
+
     const updates = {
       name:                     form.querySelector('#edit-pet-name').value.trim(),
       species:                  form.querySelector('#edit-pet-species').value,
@@ -255,7 +275,7 @@ const handleSubmit = async (event, container, petId, photoHelper) => {
       birth_place:              form.querySelector('#edit-pet-birthplace').value.trim() || null,
       current_location_city:    form.querySelector('#edit-pet-city').value.trim() || null,
       current_location_country: form.querySelector('#edit-pet-country').value.trim() || null,
-      pet_picture_url:          photoHelper.getResolvedUrl(),
+      pet_picture_url:          petPictureUrl,
     };
 
     const { error } = await supabaseClient
