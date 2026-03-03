@@ -22,15 +22,18 @@
           <h1 class="profile-name mb-1" id="profile-name">My Profile</h1>
           <p class="profile-email mb-3" id="profile-email">—</p>
 
-          <div class="d-flex flex-wrap gap-2">
-            <button type="button" class="btn btn-warning profile-action-btn" data-bs-toggle="modal" data-bs-target="#edit-profile-modal">
-              Edit profile
+          <div class="profile-actions d-flex flex-column flex-sm-row gap-2 mt-3">
+            <button type="button" class="btn btn-sm profile-action-btn profile-action-edit"
+              data-bs-toggle="modal" data-bs-target="#edit-profile-modal">
+              ✏️ Edit profile
             </button>
-            <button type="button" class="btn btn-outline-warning profile-action-btn" data-bs-toggle="modal" data-bs-target="#change-password-modal">
-              Change password
+            <button type="button" class="btn btn-sm profile-action-btn profile-action-password"
+              data-bs-toggle="modal" data-bs-target="#change-password-modal">
+              🔒 Password
             </button>
-            <button type="button" class="btn btn-outline-danger profile-action-btn" data-bs-toggle="modal" data-bs-target="#delete-account-modal">
-              Delete account
+            <button type="button" class="btn btn-sm profile-action-btn profile-action-delete"
+              data-bs-toggle="modal" data-bs-target="#delete-account-modal">
+              🗑️ Delete
             </button>
           </div>
         </section>
