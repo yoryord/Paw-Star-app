@@ -68,6 +68,33 @@ const formatDate = (value) => {
   }).format(date);
 };
 
+// Extract the in-bucket path from a Supabase Storage public URL.
+// e.g. "https://….supabase.co/storage/v1/object/public/users-media/user-profile-pictures/abc/1.jpg"
+//   → "user-profile-pictures/abc/1.jpg"
+const extractStoragePath = (publicUrl, bucket) => {
+  if (!publicUrl) return null;
+  try {
+    const url = new URL(publicUrl);
+    const marker = `/storage/v1/object/public/${bucket}/`;
+    const idx = url.pathname.indexOf(marker);
+    if (idx === -1) return null;
+    return decodeURIComponent(url.pathname.slice(idx + marker.length));
+  } catch {
+    return null;
+  }
+};
+
+// Best-effort delete — never throws so callers don't need to guard it.
+const deleteStorageFile = async (publicUrl, bucket) => {
+  const path = extractStoragePath(publicUrl, bucket);
+  if (!path) return;
+  try {
+    await supabaseClient.storage.from(bucket).remove([path]);
+  } catch {
+    // silently ignore – orphaned files are not critical
+  }
+};
+
 const getProfileData = async (userId) => {
   const { data, error } = await supabaseClient
     .from('users_profiles')
@@ -82,38 +109,29 @@ const getProfileData = async (userId) => {
 const uploadProfilePhoto = async (file, userId) => {
   if (!file) return null;
 
-  const allowedMime = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif'];
+  const allowedMime = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
   if (!allowedMime.includes(file.type)) {
-    throw new Error('Please upload a supported image file (jpg, png, webp, gif, avif).');
+    throw new Error('Please upload a supported image file (jpg, png, webp, gif).');
   }
 
-  const buffer = await file.arrayBuffer();
-  const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+  // Build storage path: user-profile-pictures/{userId}/{timestamp}.{ext}
+  const ext = (file.name.split('.').pop() || 'jpg').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+  const storagePath = `user-profile-pictures/${userId}/${Date.now()}.${ext}`;
 
-  const response = await fetch('/api/profile-photo-upload', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      userId,
-      fileName: file.name,
-      mimeType: file.type,
-      contentBase64: base64,
-    }),
-  });
+  const { error: uploadError } = await supabaseClient.storage
+    .from('users-media')
+    .upload(storagePath, file, {
+      contentType: file.type,
+      upsert: true,
+    });
 
-  if (!response.ok) {
-    let message = 'Photo upload failed.';
-    try {
-      const data = await response.json();
-      if (data?.error) message = data.error;
-    } catch {
-      // keep fallback message
-    }
-    throw new Error(message);
-  }
+  if (uploadError) throw new Error(`Photo upload failed: ${uploadError.message}`);
 
-  const data = await response.json();
-  return data?.filePath ?? null;
+  const { data } = supabaseClient.storage
+    .from('users-media')
+    .getPublicUrl(storagePath);
+
+  return data?.publicUrl ?? null;
 };
 
 const renderProfileDetails = (container, session, profile) => {
@@ -162,12 +180,28 @@ const fillEditForm = (container, profile) => {
   const avatarField = container.querySelector('#profile-avatar-input');
   const aboutField = container.querySelector('#profile-about-input');
   const photoField = container.querySelector('#profile-photo-input');
+  const photoPreview = container.querySelector('#current-photo-preview');
+  const photoThumb = container.querySelector('#current-photo-thumb');
+  const photoRemove = container.querySelector('#profile-photo-remove');
 
   if (nameField) nameField.value = profile?.name || '';
   if (countryField) countryField.value = profile?.country || '';
   if (avatarField) avatarField.value = profile?.avatar || '';
   if (aboutField) aboutField.value = profile?.about_me || '';
   if (photoField) photoField.value = '';
+
+  // Show/hide the current-photo preview block
+  if (photoPreview && photoThumb && photoRemove) {
+    const existingUrl = profile?.profile_picture_url || '';
+    if (existingUrl) {
+      photoThumb.src = existingUrl;
+      photoPreview.classList.remove('d-none');
+    } else {
+      photoThumb.src = '';
+      photoPreview.classList.add('d-none');
+    }
+    photoRemove.checked = false;
+  }
 };
 
 const initPasswordToggle = (container) => {
@@ -283,7 +317,8 @@ export const profilePage = {
 
         try {
           const profilePhotoFile = container.querySelector('#profile-photo-input')?.files?.[0] ?? null;
-          const uploadedPhotoPath = await uploadProfilePhoto(profilePhotoFile, userId);
+          const removeChecked = container.querySelector('#profile-photo-remove')?.checked ?? false;
+          const existingPhotoUrl = currentProfile?.profile_picture_url || null;
 
           const country = getFieldValue(container, '#profile-country-input');
           const avatar = getFieldValue(container, '#profile-avatar-input');
@@ -297,9 +332,19 @@ export const profilePage = {
             about_me: aboutMe || null,
           };
 
-          if (uploadedPhotoPath) {
-            payload.profile_picture_url = uploadedPhotoPath;
+          if (profilePhotoFile) {
+            // Upload new photo, then delete the old one (best-effort)
+            const newUrl = await uploadProfilePhoto(profilePhotoFile, userId);
+            payload.profile_picture_url = newUrl;
+            if (existingPhotoUrl) {
+              await deleteStorageFile(existingPhotoUrl, 'users-media');
+            }
+          } else if (removeChecked && existingPhotoUrl) {
+            // Remove photo: delete from storage and clear the DB column
+            await deleteStorageFile(existingPhotoUrl, 'users-media');
+            payload.profile_picture_url = null;
           }
+          // else: no file selected, not removing – keep existing URL as-is (not included in payload)
 
           const { error } = await supabaseClient
             .from('users_profiles')
