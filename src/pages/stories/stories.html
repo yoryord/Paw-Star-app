@@ -1,4 +1,30 @@
-<section class="container py-5">
-  <h1 class="display-6">Stories</h1>
-  <p class="lead mb-0">Stories page scaffold</p>
+<section class="stories-list-page py-5 py-lg-6">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-9 col-xl-8">
+
+        <div class="stories-list-header mb-5">
+          <h1 class="stories-list-title">📚 Stories</h1>
+          <p class="stories-list-subtitle mb-0">Discover adventures and tales from our pet community.</p>
+        </div>
+
+        <!-- Loading state -->
+        <div id="stories-loading" class="text-center py-5">
+          <span class="spinner-border text-warning" style="width:2.5rem;height:2.5rem;" role="status" aria-label="Loading…"></span>
+        </div>
+
+        <!-- Error state -->
+        <div id="stories-error" class="stories-alert alert-danger d-none" role="alert"></div>
+
+        <!-- Empty state -->
+        <div id="stories-empty" class="d-none text-center py-5">
+          <p class="stories-empty-text">No stories published yet. Check back soon! 🐾</p>
+        </div>
+
+        <!-- Stories grid -->
+        <div id="stories-grid" class="stories-grid d-none"></div>
+
+      </div>
+    </div>
+  </div>
 </section>

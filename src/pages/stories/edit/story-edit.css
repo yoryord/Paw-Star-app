@@ -1,0 +1,318 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+/* ─── Page wrapper ──────────────────────────────────────────── */
+.story-edit-page {
+  font-family: 'Manrope', var(--bs-font-sans-serif);
+  background-color: #fffcf7;
+  min-height: calc(100vh - 4rem);
+}
+
+/* ─── Back link ─────────────────────────────────────────────── */
+.story-edit-back-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--bs-warning-text-emphasis);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, gap 0.2s ease;
+}
+
+.story-edit-back-link:hover,
+.story-edit-back-link:focus {
+  opacity: 1;
+  color: var(--bs-warning-text-emphasis);
+  text-decoration: none;
+}
+
+/* ─── Alert ─────────────────────────────────────────────────── */
+.story-edit-alert {
+  border-radius: 0.75rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1.5px solid transparent;
+  margin-bottom: 1.25rem;
+}
+
+.story-edit-alert.alert-danger {
+  background-color: rgba(var(--bs-danger-rgb), 0.1);
+  border-color: rgba(var(--bs-danger-rgb), 0.35);
+  color: var(--bs-danger-text-emphasis);
+}
+
+.story-edit-alert.alert-success {
+  background-color: rgba(var(--bs-success-rgb), 0.1);
+  border-color: rgba(var(--bs-success-rgb), 0.35);
+  color: var(--bs-success-text-emphasis);
+}
+
+/* ─── Hero banner ───────────────────────────────────────────── */
+.story-edit-hero {
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg,
+    rgba(var(--bs-warning-rgb), 0.22),
+    rgba(var(--bs-danger-rgb), 0.07));
+  border: 1px solid rgba(var(--bs-warning-rgb), 0.45);
+  box-shadow: 0 0.5rem 1.5rem rgba(168, 99, 41, 0.1);
+}
+
+.story-edit-hero-icon {
+  font-size: 2.6rem;
+  width: 3.75rem;
+  height: 3.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  border: 2px solid rgba(var(--bs-warning-rgb), 0.45);
+  flex-shrink: 0;
+}
+
+.story-edit-title {
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-weight: 800;
+  color: var(--bs-emphasis-color);
+}
+
+.story-edit-subtitle {
+  font-size: 0.9rem;
+  color: var(--bs-secondary-color);
+  font-weight: 500;
+}
+
+/* ─── Form cards ────────────────────────────────────────────── */
+.story-edit-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(var(--bs-warning-rgb), 0.38);
+  border-radius: 1.2rem;
+  box-shadow: 0 0.4rem 1.1rem rgba(var(--bs-dark-rgb), 0.05);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.story-edit-card:focus-within {
+  box-shadow: 0 0.6rem 1.6rem rgba(var(--bs-warning-rgb), 0.18);
+}
+
+.story-edit-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.9rem 1.25rem;
+  background: linear-gradient(90deg,
+    rgba(var(--bs-warning-rgb), 0.12),
+    rgba(var(--bs-warning-rgb), 0.04));
+  border-bottom: 1px solid rgba(var(--bs-warning-rgb), 0.25);
+}
+
+.story-edit-section-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.story-edit-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--bs-emphasis-color);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.story-edit-optional-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bs-secondary-color);
+  background: rgba(var(--bs-secondary-rgb), 0.12);
+  border: 1px solid rgba(var(--bs-secondary-rgb), 0.3);
+  border-radius: 2rem;
+  padding: 0.1rem 0.5rem;
+}
+
+.story-edit-card-body {
+  padding: 1.25rem;
+}
+
+/* ─── Form inputs ───────────────────────────────────────────── */
+.story-edit-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--bs-emphasis-color);
+  margin-bottom: 0.35rem;
+  display: block;
+}
+
+.story-edit-input {
+  border-radius: 0.65rem;
+  border: 1.5px solid rgba(var(--bs-border-color-rgb, 0,0,0), 0.2);
+  font-family: 'Manrope', var(--bs-font-sans-serif);
+  font-size: 0.925rem;
+  padding: 0.55rem 0.9rem;
+  background: #fff;
+  color: var(--bs-body-color);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.story-edit-input:focus {
+  border-color: rgba(var(--bs-warning-rgb), 0.75);
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-warning-rgb), 0.18);
+  outline: none;
+}
+
+.story-edit-input.is-invalid {
+  border-color: rgba(var(--bs-danger-rgb), 0.65);
+}
+
+.story-edit-textarea {
+  resize: vertical;
+  min-height: 14rem;
+  line-height: 1.65;
+}
+
+/* ─── Cover image area ──────────────────────────────────────── */
+.story-edit-photo-area {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.story-edit-photo-preview {
+  width: 10rem;
+  height: 6.5rem;
+  border-radius: 0.85rem;
+  border: 2px dashed rgba(var(--bs-warning-rgb), 0.45);
+  background: rgba(var(--bs-warning-rgb), 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.story-edit-photo-placeholder {
+  font-size: 2rem;
+  opacity: 0.5;
+}
+
+.story-edit-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
+
+.story-edit-photo-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.story-edit-upload-btn {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--bs-warning-text-emphasis);
+  background: rgba(var(--bs-warning-rgb), 0.12);
+  border: 1.5px solid rgba(var(--bs-warning-rgb), 0.45);
+  border-radius: 0.6rem;
+  padding: 0.4rem 0.9rem;
+  transition: background 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.story-edit-upload-btn:hover {
+  background: rgba(var(--bs-warning-rgb), 0.22);
+  color: var(--bs-warning-text-emphasis);
+}
+
+.story-edit-clear-btn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--bs-danger-text-emphasis);
+  background: rgba(var(--bs-danger-rgb), 0.08);
+  border: 1.5px solid rgba(var(--bs-danger-rgb), 0.3);
+  border-radius: 0.6rem;
+  padding: 0.35rem 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.story-edit-clear-btn:hover {
+  background: rgba(var(--bs-danger-rgb), 0.16);
+  color: var(--bs-danger-text-emphasis);
+}
+
+.story-edit-photo-hint {
+  font-size: 0.75rem;
+  color: var(--bs-secondary-color);
+}
+
+/* ─── Submit / Cancel ───────────────────────────────────────── */
+.story-edit-submit-btn {
+  background: linear-gradient(
+    135deg,
+    rgba(var(--bs-warning-rgb), 0.95),
+    rgba(var(--bs-danger-rgb), 0.6)
+  );
+  border: none;
+  color: #fff;
+  border-radius: 0.7rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.55rem 1.5rem;
+  transition: opacity 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.story-edit-submit-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  box-shadow: 0 0.3rem 0.8rem rgba(var(--bs-warning-rgb), 0.35);
+  color: #fff;
+}
+
+.story-edit-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.story-edit-cancel-btn {
+  background: rgba(var(--bs-secondary-rgb), 0.1);
+  border: 1px solid rgba(var(--bs-secondary-rgb), 0.3);
+  color: var(--bs-secondary-color);
+  border-radius: 0.7rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.55rem 1.2rem;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.story-edit-cancel-btn:hover {
+  background: rgba(var(--bs-secondary-rgb), 0.18);
+  color: var(--bs-secondary-color);
+}
+
+/* ─── Toast ─────────────────────────────────────────────────── */
+.story-edit-toast {
+  background: rgba(255, 255, 255, 0.97);
+  border: 1.5px solid rgba(var(--bs-success-rgb), 0.45);
+  border-radius: 0.85rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(var(--bs-dark-rgb), 0.12);
+  font-family: 'Manrope', var(--bs-font-sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--bs-emphasis-color);
+  min-width: 18rem;
+}

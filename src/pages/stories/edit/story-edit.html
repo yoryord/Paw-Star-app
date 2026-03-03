@@ -1,0 +1,177 @@
+<section class="story-edit-page py-5 py-lg-6">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+
+        <!-- Back link (href set dynamically) -->
+        <a id="story-edit-back-link" href="/stories" data-link class="story-edit-back-link mb-4 d-inline-flex align-items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+          </svg>
+          Back to Story
+        </a>
+
+        <!-- Loading state -->
+        <div id="story-edit-loading" class="text-center py-5">
+          <span class="spinner-border text-warning" style="width:2.5rem;height:2.5rem;" role="status" aria-label="Loading…"></span>
+        </div>
+
+        <!-- Error state -->
+        <div id="story-edit-error" class="story-edit-alert alert-danger d-none" role="alert"></div>
+
+        <!-- Form (hidden until loaded) -->
+        <div id="story-edit-form-wrap" class="d-none">
+
+          <!-- Page header -->
+          <div class="story-edit-hero p-4 p-md-5 mb-4">
+            <div class="d-flex align-items-center gap-3">
+              <div class="story-edit-hero-icon" aria-hidden="true">📖</div>
+              <div>
+                <h1 class="story-edit-title mb-1">Edit Story</h1>
+                <p class="story-edit-subtitle mb-0" id="story-edit-subtitle">Update your story</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inline alert -->
+          <div id="story-edit-alert" class="story-edit-alert d-none" role="alert"></div>
+
+          <!-- Form -->
+          <form id="story-edit-form" novalidate>
+
+            <!-- ── Section: Story Info ───────────────────────── -->
+            <div class="story-edit-card mb-4">
+              <div class="story-edit-card-header">
+                <span class="story-edit-section-icon" aria-hidden="true">✏️</span>
+                <h2 class="story-edit-section-title">Story Details</h2>
+              </div>
+              <div class="story-edit-card-body">
+
+                <!-- Title -->
+                <div class="mb-3">
+                  <label for="edit-story-title" class="story-edit-label">
+                    Title <span class="text-danger" aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="edit-story-title"
+                    name="title"
+                    class="form-control story-edit-input"
+                    placeholder="Give your story a title…"
+                    maxlength="200"
+                    required
+                    autocomplete="off"
+                  />
+                  <div class="invalid-feedback">Please enter a title (max 200 characters).</div>
+                </div>
+
+                <!-- Status -->
+                <div class="mb-0">
+                  <label for="edit-story-status" class="story-edit-label">
+                    Status <span class="text-danger" aria-hidden="true">*</span>
+                  </label>
+                  <select id="edit-story-status" name="status" class="form-select story-edit-input" required>
+                    <option value="draft">📝 Draft</option>
+                    <option value="published">🌍 Published</option>
+                  </select>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- ── Section: Content ──────────────────────────── -->
+            <div class="story-edit-card mb-4">
+              <div class="story-edit-card-header">
+                <span class="story-edit-section-icon" aria-hidden="true">📝</span>
+                <h2 class="story-edit-section-title">Content</h2>
+              </div>
+              <div class="story-edit-card-body">
+                <div class="mb-0">
+                  <label for="edit-story-content" class="story-edit-label">
+                    Story <span class="text-danger" aria-hidden="true">*</span>
+                  </label>
+                  <textarea
+                    id="edit-story-content"
+                    name="content"
+                    class="form-control story-edit-input story-edit-textarea"
+                    placeholder="Write your story here…"
+                    required
+                    rows="12"
+                  ></textarea>
+                  <div class="invalid-feedback">Please write some content for your story.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Section: Cover Image ─────────────────── -->
+            <div class="story-edit-card mb-4">
+              <div class="story-edit-card-header">
+                <span class="story-edit-section-icon" aria-hidden="true">🖼️</span>
+                <h2 class="story-edit-section-title">
+                  Cover Image
+                  <span class="story-edit-optional-badge">optional</span>
+                </h2>
+              </div>
+              <div class="story-edit-card-body">
+                <div class="story-edit-photo-area">
+                  <div class="story-edit-photo-preview" id="story-edit-cover-preview-wrap">
+                    <span class="story-edit-photo-placeholder" id="story-edit-cover-placeholder">📷</span>
+                    <img id="story-edit-cover-img" class="story-edit-cover-img d-none" alt="Cover image preview" />
+                  </div>
+                  <div class="story-edit-photo-controls">
+                    <label for="edit-story-cover" class="btn story-edit-upload-btn" role="button">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" class="me-1">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                        <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                      </svg>
+                      Choose image
+                    </label>
+                    <input
+                      type="file"
+                      id="edit-story-cover"
+                      name="cover_image"
+                      accept="image/*"
+                      class="d-none"
+                    />
+                    <button type="button" id="story-edit-cover-clear" class="btn story-edit-clear-btn d-none">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" class="me-1">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                      </svg>
+                      Remove
+                    </button>
+                    <p id="story-edit-cover-hint" class="story-edit-photo-hint mb-0">JPG, PNG or WEBP · max 5 MB</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="d-flex justify-content-end gap-2 mb-2">
+              <a id="story-edit-cancel-btn" href="#" data-link class="btn story-edit-cancel-btn">Cancel</a>
+              <button type="submit" id="story-edit-submit-btn" class="btn story-edit-submit-btn">
+                <span class="btn-label">Save Changes</span>
+                <span class="spinner-border spinner-border-sm d-none ms-1" role="status" aria-hidden="true"></span>
+              </button>
+            </div>
+
+          </form>
+        </div><!-- /story-edit-form-wrap -->
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1090">
+    <div id="story-edit-toast" class="toast align-items-center story-edit-toast" role="status" aria-live="polite" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center gap-2">
+          <span aria-hidden="true">✅</span>
+          <span id="story-edit-toast-message">Changes saved successfully.</span>
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+</section>

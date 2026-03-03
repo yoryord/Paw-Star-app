@@ -9,6 +9,8 @@ import { profilePage } from '../pages/profile/profile.js';
 import { newPetPage } from '../pages/pets/new/new-pet.js';
 import { petViewPage } from '../pages/pets/view/pet-view.js';
 import { petEditPage } from '../pages/pets/edit/pet-edit.js';
+import { storyViewPage } from '../pages/stories/view/story-view.js';
+import { storyEditPage } from '../pages/stories/edit/story-edit.js';
 import { notFoundPage } from '../pages/not-found/not-found.js';
 import { isLoggedIn } from '../lib/auth.js';
 
@@ -31,6 +33,8 @@ const routes = {
 const dynamicRoutes = [
   { pattern: /^\/pets\/[^/]+\/view$/, handler: petViewPage },
   { pattern: /^\/pets\/[^/]+\/edit$/, handler: petEditPage },
+  { pattern: /^\/stories\/[^/]+\/view$/, handler: storyViewPage },
+  { pattern: /^\/stories\/[^/]+\/edit$/, handler: storyEditPage },
 ];
 
 /** Routes that require an authenticated session. */
