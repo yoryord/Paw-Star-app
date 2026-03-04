@@ -73,6 +73,23 @@
   font-weight: 800;
 }
 
+.landing-stars-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: clamp(1.45rem, 1.2rem + 1.15vw, 2.05rem);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--bs-warning-text-emphasis);
+}
+
+.landing-stars-icon {
+  color: var(--bs-warning);
+  line-height: 1;
+  filter: drop-shadow(0 1px 0 rgba(var(--bs-dark-rgb), 0.12));
+}
+
 .stories-cta {
   border-radius: 1.2rem;
   border: 1px solid rgba(var(--bs-warning-rgb), 0.45);
@@ -122,5 +139,11 @@
 
   .landing-page .display-5 {
     font-size: 2.2rem;
+  }
+
+  .landing-stars-title {
+    font-size: 1.3rem;
+    gap: 0.4rem;
+    white-space: nowrap;
   }
 }
