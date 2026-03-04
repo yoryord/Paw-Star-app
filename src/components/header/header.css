@@ -80,7 +80,11 @@
     padding: 0.55rem 1.5rem;
   }
 
-  /* Desktop order: Stories, My Space, Hi {name}, Logout */
+/* Desktop order: [Admin], Stories, My Space, Hi {name}, Logout */
+  .header-admin-btn {
+    order: 0;
+  }
+
   .header-stories {
     order: 1;
   }
@@ -136,7 +140,26 @@
     order: 3;
   }
 
-  .header-stories {
+  .header-admin-btn {
     order: 4;
   }
+
+  .header-stories {
+    order: 5;
+  }
+}
+
+/* ── Admin button (indigo accent, visible on all pages for admins) ── */
+.header-admin-btn {
+  --_admin-hue: 243;
+  background-color: hsl(var(--_admin-hue), 72%, 94%) !important;
+  border-color:     hsl(var(--_admin-hue), 52%, 74%) !important;
+  color:            hsl(var(--_admin-hue), 60%, 36%) !important;
+}
+
+.header-admin-btn:hover,
+.header-admin-btn:focus {
+  background-color: hsl(var(--_admin-hue), 72%, 88%) !important;
+  border-color:     hsl(var(--_admin-hue), 60%, 58%) !important;
+  color:            hsl(var(--_admin-hue), 60%, 28%) !important;
 }
