@@ -15,6 +15,11 @@ import { newStoryPage } from '../pages/stories/new/new-story.js';
 import { notFoundPage } from '../pages/not-found/not-found.js';
 import { publicProfilePage } from '../pages/public-profile/public-profile.js';
 import { adminPage } from '../pages/admin/admin.js';
+import { contactsPage } from '../pages/contacts/contacts.js';
+import { faqPage } from '../pages/faq/faq.js';
+import { privacyPolicyPage } from '../pages/privacy-policy/privacy-policy.js';
+import { termsOfServicePage } from '../pages/terms-of-service/terms-of-service.js';
+import { disclaimerPage } from '../pages/disclaimer/disclaimer.js';
 import { isLoggedIn } from '../lib/auth.js';
 
 const routes = {
@@ -27,6 +32,11 @@ const routes = {
   '/profile': profilePage,
   '/pets/new': newPetPage,
   '/admin': adminPage,
+  '/contacts': contactsPage,
+  '/faq': faqPage,
+  '/privacy-policy': privacyPolicyPage,
+  '/terms-of-service': termsOfServicePage,
+  '/disclaimer': disclaimerPage,
   '/404': notFoundPage,
 };
 
