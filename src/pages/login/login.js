@@ -1,7 +1,6 @@
 import './login.css';
 import loginTemplate from './login.html?raw';
 import { supabaseClient } from '../../lib/supabase.js';
-import { reloadAuthState } from '../../lib/auth.js';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -78,8 +77,6 @@ export const loginPage = {
       try {
         const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (error) throw error;
-
-        await reloadAuthState();
 
         window.dispatchEvent(new CustomEvent('paw:navigate', { detail: { path: '/my-space' } }));
       } catch (err) {

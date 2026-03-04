@@ -226,16 +226,16 @@ const renderUserRow = (u) => {
   const isAdmin = u.user_role === 'admin';
   return `
     <tr>
-      <td class="admin-cell-truncate" data-label="Name">${esc(u.name) || '<span class="text-secondary fst-italic">—</span>'}</td>
-      <td class="admin-cell-truncate admin-hide-mobile" data-label="Email">${esc(u.email)}</td>
-      <td data-label="Role">
+      <td class="admin-cell-truncate">${esc(u.name) || '<span class="text-secondary fst-italic">—</span>'}</td>
+      <td class="admin-cell-truncate admin-hide-mobile">${esc(u.email)}</td>
+      <td>
         <span class="admin-role-badge ${isAdmin ? 'role-admin' : 'role-user'}">
           ${isAdmin ? '🛡️ Admin' : '👤 User'}
         </span>
       </td>
-      <td class="admin-hide-mobile" data-label="Joined">${fmt(u.created_at)}</td>
-      <td class="admin-hide-mobile" data-label="Last Login">${fmt(u.last_sign_in_at)}</td>
-      <td class="admin-td-actions">
+      <td class="admin-hide-mobile">${fmt(u.created_at)}</td>
+      <td class="admin-hide-mobile">${fmt(u.last_sign_in_at)}</td>
+      <td>
         <div class="admin-action-btns">
           <button class="btn btn-admin-edit" data-action="edit-user"
             data-id="${esc(u.id)}" data-name="${esc(u.name)}" data-email="${esc(u.email)}">
@@ -262,13 +262,13 @@ const renderPetRow = (p) => {
 
   return `
     <tr>
-      <td class="admin-td-photo">${avatarHtml}</td>
-      <td class="admin-cell-truncate" data-label="Name">${esc(p.name)}</td>
-      <td data-label="Species">${esc(p.species)}</td>
-      <td class="admin-cell-truncate admin-hide-mobile" data-label="Breed">${esc(p.breed) || '—'}</td>
-      <td class="admin-cell-truncate admin-hide-mobile" data-label="Owner">${esc(p.owner_email)}</td>
-      <td class="admin-hide-mobile" data-label="Created">${fmt(p.created_at)}</td>
-      <td class="admin-td-actions">
+      <td>${avatarHtml}</td>
+      <td class="admin-cell-truncate">${esc(p.name)}</td>
+      <td>${esc(p.species)}</td>
+      <td class="admin-cell-truncate admin-hide-mobile">${esc(p.breed) || '—'}</td>
+      <td class="admin-cell-truncate admin-hide-mobile">${esc(p.owner_email)}</td>
+      <td class="admin-hide-mobile">${fmt(p.created_at)}</td>
+      <td>
         <div class="admin-action-btns">
           <button class="btn btn-admin-edit" data-action="edit-pet"
             data-id="${esc(p.id)}" data-name="${esc(p.name)}"
@@ -290,11 +290,11 @@ const renderStoryRow = (s) => {
   const statusLabel = s.status === 'published' ? '✅ Published' : '📝 Draft';
   return `
     <tr>
-      <td class="admin-cell-truncate" data-label="Title">${esc(s.title) || '(Untitled)'}</td>
-      <td data-label="Status"><span class="admin-status-badge ${statusClass}">${statusLabel}</span></td>
-      <td class="admin-cell-truncate admin-hide-mobile" data-label="Owner">${esc(s.owner_email)}</td>
-      <td class="admin-hide-mobile" data-label="Updated">${fmt(s.updated_at)}</td>
-      <td class="admin-td-actions">
+      <td class="admin-cell-truncate">${esc(s.title) || '(Untitled)'}</td>
+      <td><span class="admin-status-badge ${statusClass}">${statusLabel}</span></td>
+      <td class="admin-cell-truncate admin-hide-mobile">${esc(s.owner_email)}</td>
+      <td class="admin-hide-mobile">${fmt(s.updated_at)}</td>
+      <td>
         <div class="admin-action-btns">
           <button class="btn btn-admin-edit" data-action="edit-story"
             data-id="${esc(s.id)}" data-title="${esc(s.title ?? '')}" data-status="${esc(s.status)}">
