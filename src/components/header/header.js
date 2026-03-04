@@ -2,6 +2,8 @@ import './header.css';
 import { isLoggedIn, isAdmin, clearSession } from '../../lib/auth.js';
 import { supabaseClient } from '../../lib/supabase.js';
 
+const headerLogoUrl = new URL('../../../public/paw_star_logo_v1.png', import.meta.url).href;
+
 /** Dispatch a SPA navigation event (avoids circular dependency with router). */
 const navigate = (path) => {
   window.dispatchEvent(new CustomEvent('paw:navigate', { detail: { path } }));
@@ -34,7 +36,7 @@ const buildHeader = () => `
     <nav class="navbar navbar-expand-lg w-100 px-0">
       <div class="container d-flex justify-content-between align-items-center">
         <a class="navbar-brand p-0 mb-0" href="/" data-link>
-          <img src="/paw_star_logo_v1.png" alt="Paw Star" class="header-logo" />
+          <img src="${headerLogoUrl}" alt="Paw Star" class="header-logo" />
         </a>
         <button class="navbar-toggler border-0 p-2" type="button"
           data-bs-toggle="collapse" data-bs-target="#navbarNav"
