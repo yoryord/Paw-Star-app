@@ -577,6 +577,8 @@
 }
 
 /* ─── Responsive ─────────────────────────────────────────────── */
+
+/* ── Tablet (≤768 px): compact table, hide secondary columns ─── */
 @media (max-width: 768px) {
   .admin-panel-card {
     padding: 1rem 0.85rem 0.85rem;
@@ -599,9 +601,131 @@
     max-width: 100%;
   }
 
-  /* Hide less important columns on mobile */
   .admin-hide-mobile {
     display: none;
+  }
+}
+
+/* ── Mobile (≤575 px): stacked card layout ────────────────────── */
+@media (max-width: 575.98px) {
+  /* Remove horizontal scroll — not needed when rows are stacked */
+  .table-responsive {
+    overflow-x: visible;
+  }
+
+  /* Collapse table structure into stacked blocks */
+  .admin-table,
+  .admin-table tbody,
+  .admin-table tr,
+  .admin-table td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Column headers hidden — labels come from data-label on each td */
+  .admin-table thead {
+    display: none;
+  }
+
+  /* Each row becomes a card */
+  .admin-table tbody tr {
+    border: 1.5px solid var(--admin-accent-border);
+    border-radius: 0.85rem;
+    margin-bottom: 0.9rem;
+    padding: 0.35rem 0.75rem 0.5rem;
+    background: var(--admin-card-bg);
+    box-shadow: 0 0.1rem 0.45rem hsla(var(--admin-hue), 35%, 60%, 0.07);
+  }
+
+  .admin-table tbody tr:hover {
+    background: hsla(var(--admin-hue), 72%, 96%, 0.6);
+  }
+
+  /* Each cell = label prefix (left) + value (left) */
+  .admin-table td {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0.48rem 0.2rem;
+    border-bottom: 1px solid hsla(var(--admin-hue), 35%, 88%, 0.5);
+    gap: 0.5rem;
+    font-size: 0.855rem;
+  }
+
+  .admin-table tbody tr td:last-child {
+    border-bottom: none;
+    padding-bottom: 0.2rem;
+  }
+
+  /* Render the data-label attribute as a small uppercase label on the left */
+  .admin-table td[data-label]::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    min-width: 5.5rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--admin-accent-dark);
+  }
+
+  /* Override hidden-mobile: all columns surface as stacked rows */
+  .admin-table td.admin-hide-mobile {
+    display: flex !important;
+  }
+
+  /* Truncation: off in card view — allow wrapping */
+  .admin-cell-truncate {
+    max-width: none;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    word-break: break-word;
+    text-align: left;
+    flex: 1;
+  }
+
+  /* Pet avatar cell: centered, no text label */
+  .admin-td-photo {
+    justify-content: center;
+    border-bottom: none;
+    padding-top: 0.65rem;
+    padding-bottom: 0.1rem;
+  }
+
+  .admin-pet-avatar,
+  .admin-pet-avatar-fallback {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.4rem;
+  }
+
+  /* Actions cell: stacked full-width buttons */
+  .admin-td-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+    padding-top: 0.6rem;
+    margin-top: 0.15rem;
+    border-top: 1px dashed hsla(var(--admin-hue), 35%, 78%, 0.65);
+  }
+
+  .admin-action-btns {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+    width: 100%;
+  }
+
+  .btn-admin-edit,
+  .btn-admin-delete,
+  .btn-admin-make-admin,
+  .btn-admin-remove-admin {
+    width: 100%;
+    text-align: center;
+    font-size: 0.82rem;
+    padding: 0.42rem 0.5rem;
   }
 }
 

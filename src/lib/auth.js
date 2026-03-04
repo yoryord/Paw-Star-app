@@ -44,11 +44,18 @@ export const initAuth = async () => {
     loadAdminStatus(_session?.user?.id),
   ]);
 
-  supabaseClient.auth.onAuthStateChange((_event, session) => {
+  supabaseClient.auth.onAuthStateChange(async (_event, session) => {
     _session = session ?? null;
-    loadProfileName(_session?.user?.id);
-    loadAdminStatus(_session?.user?.id);
+    await reloadAuthState();
   });
+};
+
+/** Reload profile name and admin status for the current session. */
+export const reloadAuthState = async () => {
+  await Promise.all([
+    loadProfileName(_session?.user?.id),
+    loadAdminStatus(_session?.user?.id),
+  ]);
 };
 
 /** Returns the current Supabase session object, or null when logged out. */
