@@ -69,18 +69,25 @@ const applySpeciesStarCard = (container, speciesKey, starPet) => {
   const imageEl = container.querySelector(`#landing-${speciesKey}-star-avatar-img`);
   const fallbackEl = container.querySelector(`#landing-${speciesKey}-star-avatar-fallback`);
   const nameEl = container.querySelector(`#landing-${speciesKey}-star-name`);
+  const linkEl = container.querySelector(`#landing-${speciesKey}-star-link`);
 
-  if (!imageEl || !fallbackEl || !nameEl) return;
+  if (!imageEl || !fallbackEl || !nameEl || !linkEl) return;
 
   if (!starPet) {
     fallbackEl.textContent = fallbackEmoji;
     fallbackEl.classList.remove('d-none');
     imageEl.classList.add('d-none');
     nameEl.textContent = 'Waiting for likes...';
+    linkEl.setAttribute('href', '#');
+    linkEl.setAttribute('aria-disabled', 'true');
+    linkEl.classList.add('is-disabled');
     return;
   }
 
   nameEl.textContent = `${starPet.name ?? 'Unnamed pet'} · ${starPet.likes} likes`;
+  linkEl.setAttribute('href', `/pets/${encodeURIComponent(starPet.id)}/view`);
+  linkEl.setAttribute('aria-disabled', 'false');
+  linkEl.classList.remove('is-disabled');
 
   if (starPet.pet_picture_url) {
     imageEl.src = starPet.pet_picture_url;
